@@ -40,12 +40,17 @@ body {
 }
 
 input {
-    width: 70%;
+    width: 75%;
     padding: 10px;
     margin: 10px;
     color: #ffffff;
-    background-color: #240d32;
+    background-color: #3c0e59;
     border: none;
     border-radius: 25px;
+    font-family: Arial, sans-serif;
+}
+
+input::placeholder {
+    color: #b02bf3;
     font-family: Arial, sans-serif;
 }
