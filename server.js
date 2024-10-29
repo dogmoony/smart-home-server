@@ -134,7 +134,7 @@ app.post("/auth/refresh", (req, res) => {
 
 //Get Devices Endpoint
 app.get("/api/devices", (req, res) => {
-  res.json(devices);
+  res.sendFile(__dirname + "/client/public/index.html");
 });
 
 //Add Device Endpoint
