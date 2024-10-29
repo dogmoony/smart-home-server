@@ -54,3 +54,15 @@ input::placeholder {
     color: #ffffff;
     font-family: Arial, sans-serif;
 }
+
+button {
+    width: 50%;
+    height: 15%;
+    padding: 10px;
+    margin: 10px;
+    color: #621592;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 25px;
+    font-family: Arial, sans-serif;
+    }
