@@ -57,7 +57,7 @@ input::placeholder {
 
 button {
     width: 50%;
-    height: 15%;
+    height: 25%;
     padding: 10px;
     margin: 10px;
     color: #621592;
@@ -65,4 +65,5 @@ button {
     border: none;
     border-radius: 25px;
     font-family: Arial, sans-serif;
+    font-size: 24px;
     }
