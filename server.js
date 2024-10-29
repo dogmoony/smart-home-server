@@ -100,7 +100,7 @@ let notifications = [
 
 // Sample route
 app.get("/", (req, res) => {
-  res.send("Smart Home Assistant API");
+  res.sendFile(__dirname + "/public/index.html");
 });
 
 app.listen(PORT, "0.0.0.0", () => {
