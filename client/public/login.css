@@ -1,0 +1,9 @@
+body {
+    background-image: url("./data/back_login.jpg"); /* Path to your image */
+    background-size: cover;       /* Scales image to cover the whole page */
+    background-repeat: no-repeat; /* Prevents tiling (repeating) */
+    background-position: center;  /* Centers the image */
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+}
