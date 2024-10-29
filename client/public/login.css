@@ -5,14 +5,10 @@ html {
 }
 
 body {
-    height: 100%;
-    width: 100%;
     background-image: url("./data/back_login.jpg"); /* Path to your image */
-    background-size: cover;       /* Scales image to cover the whole page */
-    background-repeat: no-repeat; /* Prevents tiling (repeating) */
-    background-position: center;  /* Centers the image */
-    margin: 0;
-    padding: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     font-family: Arial, sans-serif;
     color: white;
 }
