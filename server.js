@@ -109,11 +109,16 @@ app.listen(PORT, "0.0.0.0", () => {
 
 //Login Endpoint
 app.post("/auth/login", (req, res) => {
-  const { username, password } = req.body;
-  if (username === "admin" && password === "password") {
-    res.json({ message: "Login successful" });
+  const { email, password } = req.body;
+
+  // Dummy user data for validation (for demonstration)
+  const validEmail = "user@example.com";
+  const validPassword = "password123";
+
+  if (email === validEmail && password === validPassword) {
+    res.json({ message: "Sign-in successful!" });
   } else {
-    res.status(401).json({ message: "Invalid credentials" });
+    res.status(401).json({ message: "Invalid email or password." });
   }
 });
 
@@ -134,7 +139,7 @@ app.post("/auth/refresh", (req, res) => {
 
 //Get Devices Endpoint
 app.get("/api/devices", (req, res) => {
-  res.sendFile(__dirname + "/client/public/index.html");
+  res.json(devices);
 });
 
 //Add Device Endpoint
