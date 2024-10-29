@@ -24,7 +24,6 @@ body {
 }
 
 .login-container {
-    background-color: red;
     width: 20%;
     height: 50%;
     display: flex;
@@ -38,4 +37,15 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.input {
+    width: 70%;
+    padding: 10px;
+    margin: 10px;
+    color: #ffffff;
+    background-color: #240d32;
+    border: none;
+    border-radius: 25px;
+    font-family: Arial, sans-serif;
 }
