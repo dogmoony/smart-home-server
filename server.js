@@ -99,7 +99,7 @@ let notifications = [
 
 // Sample route
 app.get("/", (req, res) => {
-  res.send("Smart Home Assistant API with WEBHOOK!");
+  res.send("Smart Home Assistant API with WEB!");
 });
 
 app.listen(PORT, "0.0.0.0", () => {
