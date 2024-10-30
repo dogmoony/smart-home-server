@@ -1,5 +1,17 @@
 const express = require("express");
+const client = require("./db");
 const app = express();
+
+app.get("/users", async (req, res) => {
+  try {
+    const result = await client.query("SELECT * FROM users");
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error executing query", error.stack);
+    res.status(500).send("Server error");
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 
 // Middleware to parse JSON data from the request body
