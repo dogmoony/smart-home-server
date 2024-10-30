@@ -49,5 +49,6 @@ button:hover {
 }
 
 a {
+    background-color: red;
     color: #ffffff;
 }
