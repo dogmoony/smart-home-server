@@ -1,10 +1,12 @@
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5000;
+const db = require("./db");
 
 // Middleware to parse JSON data from the request body
 app.use(express.json());
 app.use(express.static("./client/public")); // Serve static files from 'public' folder
+app.use("/api/devices", require("./routes/devices")); // Devices API
 
 let devices = [
   { id: 1, name: "Smart Light", type: "light", status: "off" },
@@ -131,6 +133,10 @@ app.post("/auth/refresh", (req, res) => {
 
 //Get Devices Endpoint
 app.get("/api/devices", (req, res) => {
+  async function getDevices() {
+    const devices = await db.query("SELECT * FROM devices");
+    return devices;
+  }
   res.json(devices);
 });
 
