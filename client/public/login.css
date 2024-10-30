@@ -71,3 +71,7 @@ button {
 button:hover {
     background-color: #b8a2bd;
 }
+
+a {
+    color: #ffffff;
+}
