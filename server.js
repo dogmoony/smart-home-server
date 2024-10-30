@@ -3,6 +3,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const db = require("./db");
 
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
 // Middleware to parse JSON data from the request body
 app.use(express.json());
 app.use(express.static("./client/public")); // Serve static files from 'public' folder
@@ -96,10 +100,6 @@ let notifications = [
     timestamp: new Date().toISOString(),
   },
 ];
-
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server is running on port ${PORT}`);
-});
 
 //Login Endpoint
 app.post("/auth/login", (req, res) => {
