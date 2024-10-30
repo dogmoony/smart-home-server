@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const db = require("./db");
 const PORT = process.env.PORT || 5000;
 
 // Middleware to parse JSON data from the request body
@@ -95,11 +96,6 @@ let notifications = [
   },
 ];
 
-// Sample route
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/client/public/index.html");
-});
-
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}`);
 });
@@ -136,7 +132,12 @@ app.post("/auth/refresh", (req, res) => {
 
 //Get Devices Endpoint
 app.get("/api/devices", (req, res) => {
-  res.json(devices);
+  async function getDevices() {
+    const devices = await db.query("SELECT * FROM devices");
+    return devices;
+  }
+
+  res.json(getDevices());
 });
 
 //Add Device Endpoint
