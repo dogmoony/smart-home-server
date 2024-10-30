@@ -33,7 +33,7 @@ body {
 }
 
 button {
-    width: 50%;
+    width: 100%;
     padding: 10px;
     margin: 10px;
     color: #621592;
@@ -49,6 +49,5 @@ button:hover {
 }
 
 a {
-    background-color: red;
     color: #ffffff;
 }
