@@ -23,6 +23,13 @@ body {
     align-items: center;
 }
 
+p {
+    margin-top: 0;
+    margin: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
 .smart-container {
     width: 20%;
     height: 50%;
