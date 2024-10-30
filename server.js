@@ -132,10 +132,6 @@ app.post("/auth/refresh", (req, res) => {
 
 //Get Devices Endpoint
 app.get("/api/devices", (req, res) => {
-  async function getDevices() {
-    const devices = await db.query("SELECT * FROM devices");
-    return devices;
-  }
   res.json(devices);
 });
 
