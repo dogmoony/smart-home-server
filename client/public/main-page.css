@@ -32,4 +32,6 @@ body {
     height: 80%;
     margin: 50px auto;
     text-align: center;
+    backdrop-filter: blur(10px); /* Applies blur effect to the background */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
   }
