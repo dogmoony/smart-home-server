@@ -9,7 +9,7 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
 
   try {
     // Send POST request to the backend
-    const response = await fetch(
+    const res = await fetch(
       "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/auth/create",
       {
         method: "POST",
@@ -20,11 +20,11 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
       }
     );
 
-    const result = await response.json();
+    const result = await res.json();
 
     // Display response message to the user
     const messageElement = document.getElementById("message");
-    if (response.ok) {
+    if (res.ok) {
       messageElement.textContent = result.message; // Success message
       messageElement.style.color = "green";
     } else {
