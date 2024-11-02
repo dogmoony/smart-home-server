@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 // Endpoint to fetch data from the database
 app.get("/data", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM your_table_name LIMIT 10"); // Replace 'your_table_name' with your actual table name
+    const result = await pool.query("SELECT * FROM users LIMIT 10"); // Replace 'your_table_name' with your actual table name
     res.json(result.rows);
   } catch (err) {
     console.error("Error fetching data from the database:", err);
