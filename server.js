@@ -44,7 +44,6 @@ app.post("/auth/create", async (req, res) => {
       user: result.rows[0],
     });
   } catch (error) {
-    let message;
     switch (error.code) {
       case "23505":
         return res.status(400).json({
@@ -62,18 +61,39 @@ app.post("/auth/create", async (req, res) => {
   }
 });
 
-//Login Endpoint
-app.post("/auth/login", (req, res) => {
-  const { email, password } = req.body;
+// Login Endpoint
+app.post("/auth/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  // Dummy user data for validation (for demonstration)
-  const validEmail = "user@example.com";
-  const validPassword = "password123";
+    // Query the database to find the user
+    const result = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
 
-  if (email === validEmail && password === validPassword) {
-    res.json({ message: "Sign-in successful!" });
-  } else {
-    res.status(401).json({ message: "Invalid email or password." });
+    // Check if the user exists
+    if (result.rows.length === 0) {
+      return res.status(401).json({ message: "Invalid email." });
+    }
+
+    const user = result.rows[0];
+
+    // Compare the provided password with the hashed password
+    const match = await bcrypt.compare(password, user.password);
+
+    if (match) {
+      // Passwords match, login successful
+      return res.status(200).json({
+        message: "Login successful",
+        user: { id: user.id, username: user.username, email: user.email }, // Return user info except the password
+      });
+    } else {
+      // Passwords do not match
+      return res.status(401).json({ message: "Invalid password." });
+    }
+  } catch (error) {
+    console.error("Error during login:", error);
+    return res.status(500).json({ message: "An unexpected error occurred." });
   }
 });
 
