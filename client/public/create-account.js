@@ -23,13 +23,13 @@ document
 
       const result = await res.json();
 
-      // Display response message to the user
       const messageElement = document.getElementById("message");
       if (res.ok) {
         messageElement.textContent = result.message; // Success message
         messageElement.style.color = "green";
       } else {
-        messageElement.textContent = result.error || "Error creating account";
+        // Show the error message from the server if it exists
+        messageElement.textContent = result.message || "Error creating account";
         messageElement.style.color = "red";
       }
     } catch (error) {
