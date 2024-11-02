@@ -66,7 +66,7 @@ app.post("/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    console.log(email, password);
+    console.log(email, password, req.body);
 
     // Query the database to find the user
     const result = await pool.query(
