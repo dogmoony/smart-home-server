@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-
+const bcrypt = require("bcrypt");
+const pool = require("./pool");
 const PORT = process.env.PORT || 5000;
 
 // Middleware to parse JSON data from the request body
@@ -11,94 +12,40 @@ app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-let devices = [
-  { id: 1, name: "Smart Light", type: "light", status: "off" },
-  { id: 2, name: "Smart Thermostat", type: "thermostat", status: "off" },
-  { id: 3, name: "Smart Lock", type: "lock", status: "locked" },
-];
+// Create account endpoint
+app.post("/auth/create", async (req, res) => {
+  try {
+    // Step 1: Pull user data from the request body
+    const { username, email, password } = req.body;
 
-// Sample data: an array of scenes
-let scenes = [
-  {
-    id: 1,
-    name: "Movie Night",
-    actions: [
-      { deviceId: 1, action: "turn_on" }, // Smart Light
-      { deviceId: 2, action: "set_temperature", value: 22 }, // Smart Thermostat
-    ],
-  },
-  {
-    id: 2,
-    name: "Away Mode",
-    actions: [
-      { deviceId: 1, action: "turn_off" }, // Smart Light
-      { deviceId: 3, action: "lock" }, // Smart Lock
-    ],
-  },
-];
+    // Step 2: Validate input
+    if (!username || !email || !password) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
 
-// Sample data: an array of automations
-let automations = [
-  {
-    id: 1,
-    name: "Motion Detected",
-    trigger: "motion",
-    actions: [
-      { deviceId: 1, action: "turn_on" }, // Smart Light
-    ],
-  },
-  {
-    id: 2,
-    name: "Leave Home",
-    trigger: "away",
-    actions: [
-      { deviceId: 1, action: "turn_off" }, // Smart Light
-      { deviceId: 3, action: "lock" }, // Smart Lock
-    ],
-  },
-];
+    // Step 3: Hash the password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-let userPreferences = [
-  {
-    userId: 1,
-    preferences: {
-      theme: "dark",
-      notifications: true,
-      language: "en",
-    },
-  },
-  {
-    userId: 2,
-    preferences: {
-      theme: "light",
-      notifications: false,
-      language: "fr",
-    },
-  },
-];
+    // Step 4: Insert user data into the database
+    const query = `
+      INSERT INTO users (username, email, password) 
+      VALUES ($1, $2, $3) 
+      RETURNING id, username, email;
+    `;
+    const values = [username, email, hashedPassword];
+    const result = await pool.query(query, values);
 
-let notifications = [
-  {
-    userId: 1,
-    message: "Your profile has been updated.",
-    timestamp: new Date().toISOString(),
-  },
-  {
-    userId: 1,
-    message: "Your language preference was changed successfully.",
-    timestamp: new Date().toISOString(),
-  },
-  {
-    userId: 2,
-    message: "Your password was changed successfully.",
-    timestamp: new Date().toISOString(),
-  },
-  {
-    userId: 2,
-    message: "You have used 1990kV today.",
-    timestamp: new Date().toISOString(),
-  },
-];
+    // Step 5: Send a response with the created user details (without the password)
+    res.status(201).json({
+      message: "Account created successfully",
+      user: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error creating account:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 //Login Endpoint
 app.post("/auth/login", (req, res) => {
