@@ -1,39 +1,40 @@
-// app.js
-document.getElementById("signup-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
+document
+  .getElementById("create-account-form")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  // Get input values
-  const username = document.getElementById("username").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+    // Get input values
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-  try {
-    // Send POST request to the backend
-    const res = await fetch(
-      "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/auth/create",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, email, password }),
+    try {
+      // Send POST request to the backend
+      const res = await fetch(
+        "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/auth/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, email, password }),
+        }
+      );
+
+      const result = await res.json();
+
+      // Display response message to the user
+      const messageElement = document.getElementById("message");
+      if (res.ok) {
+        messageElement.textContent = result.message; // Success message
+        messageElement.style.color = "green";
+      } else {
+        messageElement.textContent = result.error || "Error creating account";
+        messageElement.style.color = "red";
       }
-    );
-
-    const result = await res.json();
-
-    // Display response message to the user
-    const messageElement = document.getElementById("message");
-    if (res.ok) {
-      messageElement.textContent = result.message; // Success message
-      messageElement.style.color = "green";
-    } else {
-      messageElement.textContent = result.error || "Error creating account";
-      messageElement.style.color = "red";
+    } catch (error) {
+      console.error("Error:", error);
+      document.getElementById("message").textContent =
+        "An error occurred. Please try again.";
     }
-  } catch (error) {
-    console.error("Error:", error);
-    document.getElementById("message").textContent =
-      "An error occurred. Please try again.";
-  }
-});
+  });
