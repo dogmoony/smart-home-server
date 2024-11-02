@@ -66,11 +66,12 @@ app.post("/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log(email, password);
+
     // Query the database to find the user
-    const trimmedEmail = email.trim();
     const result = await pool.query(
       "SELECT * FROM users WHERE email ILIKE $1",
-      [trimmedEmail]
+      [email]
     );
 
     console.log("Query result:", result.rows); // Log the result of the query
