@@ -57,6 +57,7 @@ app.post("/auth/create", async (req, res) => {
     }
     res.status(400).json({
       message: message,
+      user: result.rows[0],
     });
   }
 });
