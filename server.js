@@ -31,7 +31,7 @@ app.post("/auth/create", async (req, res) => {
     const query = `
       INSERT INTO users (username, email, password) 
       VALUES ($1, $2, $3) 
-      RETURNING id, username, email;
+      RETURNING home_id, username, email;
     `;
     const values = [username, email, hashedPassword];
     const result = await pool.query(query, values);
