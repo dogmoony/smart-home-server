@@ -47,15 +47,17 @@ app.post("/auth/create", async (req, res) => {
     let message;
     switch (error.code) {
       case "23505":
-        res.status(400).json({
+        return res.status(400).json({
           message: "This username or email is already in use.",
         });
-        break;
       case "23503":
-        message = "Invalid data reference. Please check your inputs.";
-        break;
+        return res.status(400).json({
+          message: "Invalid data reference. Please check your inputs.",
+        });
       default:
-        message = "An unexpected error occurred. Try again later.";
+        return res.status(500).json({
+          message: "An unexpected error occurred. Try again later.",
+        });
     }
   }
 });
