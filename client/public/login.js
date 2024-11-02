@@ -2,7 +2,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   e.preventDefault(); // Prevent the default form submission
 
   // Get input values
-  const username = document.getElementById("email").value;
+  const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
   try {
