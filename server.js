@@ -67,9 +67,10 @@ app.post("/auth/login", async (req, res) => {
     const { email, password } = req.body;
 
     // Query the database to find the user
-    const result = await pool.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
+    const result = await pool.query(
+      "SELECT * FROM users WHERE email ILIKE $1",
+      [email]
+    );
 
     console.log("Query result:", result.rows); // Log the result of the query
 
