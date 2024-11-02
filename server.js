@@ -47,7 +47,9 @@ app.post("/auth/create", async (req, res) => {
     let message;
     switch (error.code) {
       case "23505":
-        message = "This username or email is already in use.";
+        res.status(400).json({
+          message: "This username or email is already in use.",
+        });
         break;
       case "23503":
         message = "Invalid data reference. Please check your inputs.";
@@ -55,10 +57,6 @@ app.post("/auth/create", async (req, res) => {
       default:
         message = "An unexpected error occurred. Try again later.";
     }
-    res.status(400).json({
-      message: message,
-      user: result.rows[0],
-    });
   }
 });
 
