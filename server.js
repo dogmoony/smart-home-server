@@ -44,8 +44,18 @@ app.post("/auth/create", async (req, res) => {
       user: result.rows[0],
     });
   } catch (error) {
-    console.error("Error creating account:", error);
-    res.status(500).json({ error: "Internal server error" });
+    let message;
+    switch (error.code) {
+      case "23505":
+        message = "This username or email is already in use.";
+        break;
+      case "23503":
+        message = "Invalid data reference. Please check your inputs.";
+        break;
+      default:
+        message = "An unexpected error occurred. Try again later.";
+    }
+    return { success: false, message };
   }
 });
 
