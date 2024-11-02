@@ -71,6 +71,8 @@ app.post("/auth/login", async (req, res) => {
       email,
     ]);
 
+    console.log("Query result:", result.rows); // Log the result of the query
+
     // Check if the user exists
     if (result.rows.length === 0) {
       return res.status(401).json({ message: "Invalid email." });
