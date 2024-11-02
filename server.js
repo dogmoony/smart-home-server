@@ -1,10 +1,12 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const bcrypt = require("bcrypt");
 const pool = require("./pool");
 const PORT = process.env.PORT || 5000;
 
 // Middleware to parse JSON data from the request body
+app.use(cors()); // Allow all origins or configure specific ones
 app.use(express.json());
 app.use(express.static("./client/public")); // Serve static files from 'public' folder
 
