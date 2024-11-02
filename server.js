@@ -55,7 +55,9 @@ app.post("/auth/create", async (req, res) => {
       default:
         message = "An unexpected error occurred. Try again later.";
     }
-    return { success: false, message };
+    res.status(400).json({
+      message: message,
+    });
   }
 });
 
