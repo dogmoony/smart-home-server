@@ -1,6 +1,7 @@
-require("dotenv").config(); // Load environment variables
+require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
+const path = require("path");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 
@@ -17,7 +18,7 @@ app.use(
     secret: "your_secret_key",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Set to true if using HTTPS
+    cookie: { secure: process.env.NODE_ENV === "production" },
   })
 );
 
@@ -63,34 +64,32 @@ function isAuthenticated(req, res, next) {
   if (req.session.userId) {
     return next();
   } else {
-    res.redirect("/login.html");
+    res.status(401).json({ message: "Unauthorized" });
   }
 }
 
+// Login Endpoint
 app.post("/auth/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Query the database for the user by email
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
 
-    // Check if user exists
     if (result.rows.length === 0) {
       return res.status(401).json({ message: "Invalid email or password." });
     }
 
     const user = result.rows[0];
-
-    // Compare provided password with the hashed password from the database
     const match = await bcrypt.compare(password, user.password);
     if (match) {
-      // Set session variables
       req.session.userId = user.home_id;
       req.session.username = user.username;
 
-      res.redirect("/main.html"); // Redirect to the main page after login
+      res
+        .status(200)
+        .json({ message: "Login successful", redirectUrl: "/main.html" });
     } else {
       res.status(401).json({ message: "Invalid email or password." });
     }
@@ -106,13 +105,15 @@ app.post("/auth/logout", (req, res) => {
     if (err) {
       return res.status(500).json({ message: "Could not log out." });
     }
-    res.redirect("/login.html");
+    res
+      .status(200)
+      .json({ message: "Logged out successfully", redirectUrl: "/login.html" });
   });
 });
 
 // Main Page Endpoint (Protected Route)
 app.get("/main", isAuthenticated, (req, res) => {
-  res.sendFile("./client/public/main-page.html"); // Serve main page only if logged in
+  res.sendFile(path.join(__dirname, "client", "public", "main-page.html"));
 });
 
 //Token Refresh Endpoint
