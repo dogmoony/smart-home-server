@@ -1,8 +1,8 @@
+require("dotenv").config(); // Load environment variables
 const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-require("dotenv").config(); // Load environment variables
+const jwt = require("jsonwebtoken"); // Import jsonwebtoken after dotenv
 
 const app = express();
 const pool = require("./pool");
@@ -67,6 +67,12 @@ app.post("/auth/login", async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
 
     if (match) {
+      if (!process.env.JWT_SECRET) {
+        throw new Error(
+          "JWT_SECRET is not defined in the environment variables."
+        );
+      }
+
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
         expiresIn: "2h",
       });
