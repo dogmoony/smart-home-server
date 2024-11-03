@@ -116,9 +116,24 @@ app.get("/main", isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, "client", "public", "main-page.html"));
 });
 
-//Get Devices Endpoint
-app.get("/api/devices", (req, res) => {
-  res.json(devices);
+app.get("/api/devices", async (req, res) => {
+  const homeId = req.session.userHomeId; // Assuming user’s home ID is stored in session
+
+  try {
+    // Query the database for devices associated with this home ID
+    const result = await pool.query(
+      "SELECT * FROM devices WHERE home_id = $1",
+      [homeId]
+    );
+
+    // Respond with the devices as JSON
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching devices:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while fetching devices" });
+  }
 });
 
 //Add Device Endpoint
