@@ -116,16 +116,6 @@ app.get("/main", isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, "client", "public", "main-page.html"));
 });
 
-//Token Refresh Endpoint
-app.post("/auth/refresh", (req, res) => {
-  const { refreshToken } = req.body;
-  if (refreshToken === "refreshToken") {
-    res.json({ accessToken: "newAccessToken" });
-  } else {
-    res.status(401).json({ message: "Invalid refresh token" });
-  }
-});
-
 //Get Devices Endpoint
 app.get("/api/devices", (req, res) => {
   res.json(devices);
