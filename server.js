@@ -3,7 +3,6 @@ const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-const session = require("express-session");
 
 const app = express();
 const pool = require("./pool");
