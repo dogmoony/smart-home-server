@@ -19,22 +19,23 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     );
 
     const result = await res.json();
-
-    // Display response message to the user
     const messageElement = document.getElementById("message");
-    if (res.ok && result.token) {
-      localStorage.setItem("authToken", result.token);
-      messageElement.textContent = result.message; // Success message
-      messageElement.style.color = "green";
-      window.location.href = "./main-page.html"; // Redirect to the main page
+
+    if (res.ok) {
+      // Display success message
+      messageElement.textContent = result.message;
+      messageElement.style.color = "green"; // Set color to green for success
+      localStorage.setItem("authToken", result.token); // Store token if needed
+      window.location.href = result.redirectUrl; // Redirect if login is successful
     } else {
-      messageElement.textContent =
-        result.message || "Login failed. Please try again.";
-      messageElement.style.color = "red";
+      // Display error message
+      messageElement.textContent = result.message;
+      messageElement.style.color = "red"; // Set color to red for errors
     }
   } catch (error) {
     console.error("Error:", error);
     document.getElementById("message").textContent =
       "An error occurred. Please try again.";
+    document.getElementById("message").style.color = "red"; // Set color to red for general errors
   }
 });
