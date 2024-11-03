@@ -1,17 +1,19 @@
 const express = require("express");
 const cors = require("cors");
-const app = express();
-require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require("dotenv").config(); // Load environment variables
+
+const app = express();
 const pool = require("./pool");
 const PORT = process.env.PORT || 5000;
 
-// Middleware to parse JSON data from the request body
-app.use(cors()); // Allow all origins or configure specific ones
+// Middleware
+app.use(cors());
 app.use(express.json());
-app.use(express.static("./client/public")); // Serve static files from 'public' folder
+app.use(express.static("./client/public"));
 
+// Listen on specified PORT
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}`);
 });
@@ -19,46 +21,31 @@ app.listen(PORT, "0.0.0.0", () => {
 // Create account endpoint
 app.post("/auth/create", async (req, res) => {
   try {
-    // Step 1: Pull user data from the request body
     const { username, email, password } = req.body;
-
-    // Step 2: Validate input
     if (!username || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    // Step 3: Hash the password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    // Step 4: Insert user data into the database
+    const hashedPassword = await bcrypt.hash(password, 10);
     const query = `
-      INSERT INTO users (username, email, password) 
-      VALUES ($1, $2, $3) 
+      INSERT INTO users (username, email, password)
+      VALUES ($1, $2, $3)
       RETURNING home_id, username, email;
     `;
-    const values = [username, email, hashedPassword];
-    const result = await pool.query(query, values);
-
-    // Step 5: Send a response with the created user details (without the password)
-    res.status(201).json({
-      message: "Account created successfully",
-      user: result.rows[0],
-    });
+    const result = await pool.query(query, [username, email, hashedPassword]);
+    res
+      .status(201)
+      .json({ message: "Account created successfully", user: result.rows[0] });
   } catch (error) {
-    switch (error.code) {
-      case "23505":
-        return res.status(400).json({
-          message: "This username or email is already in use.",
-        });
-      case "23503":
-        return res.status(400).json({
-          message: "Invalid data reference. Please check your inputs.",
-        });
-      default:
-        return res.status(500).json({
-          message: "An unexpected error occurred. Try again later.",
-        });
+    console.error("Error creating account:", error);
+    if (error.code === "23505") {
+      return res
+        .status(400)
+        .json({ message: "Username or email already in use." });
+    } else if (error.code === "23503") {
+      return res.status(400).json({ message: "Invalid data reference." });
+    } else {
+      return res.status(500).json({ message: "An unexpected error occurred." });
     }
   }
 });
@@ -67,35 +54,28 @@ app.post("/auth/create", async (req, res) => {
 app.post("/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // Query the database to find the user
     const result = await pool.query(
       "SELECT * FROM users WHERE email ILIKE $1",
       [email]
     );
 
-    // Check if the user exists
     if (result.rows.length === 0) {
       return res.status(401).json({ message: "Invalid email." });
     }
 
     const user = result.rows[0];
-
-    // Compare the provided password with the hashed password
     const match = await bcrypt.compare(password, user.password);
 
     if (match) {
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
         expiresIn: "2h",
       });
-      // Passwords match, login successful
       return res.status(200).json({
         message: "Login successful",
         user: { id: user.id, username: user.username, email: user.email },
         token,
       });
     } else {
-      // Passwords do not match
       return res.status(401).json({ message: "Invalid password." });
     }
   } catch (error) {
