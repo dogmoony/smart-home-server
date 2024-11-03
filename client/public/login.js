@@ -22,14 +22,14 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
 
     // Display response message to the user
     const messageElement = document.getElementById("message");
-    if (res.ok) {
+    if (res.ok && result.token) {
       localStorage.setItem("authToken", result.token);
       messageElement.textContent = result.message; // Success message
       messageElement.style.color = "green";
       window.location.href = "./main-page.html"; // Redirect to the main page
-      // You can also redirect to another page or perform other actions here
     } else {
-      messageElement.textContent = result.message; // Display the error message from the server
+      messageElement.textContent =
+        result.message || "Login failed. Please try again.";
       messageElement.style.color = "red";
     }
   } catch (error) {
