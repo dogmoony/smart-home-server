@@ -1,8 +1,9 @@
 require("dotenv").config(); // Load environment variables
 const express = require("express");
+const session = require("express-session");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken"); // Import jsonwebtoken after dotenv
+const session = require("express-session");
 
 const app = express();
 const pool = require("./pool");
@@ -12,6 +13,14 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(express.static("./client/public"));
+app.use(
+  session({
+    secret: "your_secret_key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Set to true if using HTTPS
+  })
+);
 
 // Listen on specified PORT
 app.listen(PORT, "0.0.0.0", () => {
@@ -50,49 +59,61 @@ app.post("/auth/create", async (req, res) => {
   }
 });
 
-// Login Endpoint
-app.post("/auth/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const result = await pool.query(
-      "SELECT * FROM users WHERE email ILIKE $1",
-      [email]
-    );
+// Middleware to check if the user is authenticated
+function isAuthenticated(req, res, next) {
+  if (req.session.userId) {
+    return next();
+  } else {
+    res.redirect("/login.html");
+  }
+}
 
+app.post("/auth/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Query the database for the user by email
+    const result = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+
+    // Check if user exists
     if (result.rows.length === 0) {
-      return res.status(401).json({ message: "Invalid email." });
+      return res.status(401).json({ message: "Invalid email or password." });
     }
 
     const user = result.rows[0];
+
+    // Compare provided password with the hashed password from the database
     const match = await bcrypt.compare(password, user.password);
-
     if (match) {
-      if (!process.env.JWT_SECRET) {
-        throw new Error(
-          "JWT_SECRET is not defined in the environment variables."
-        );
-      }
+      // Set session variables
+      req.session.userId = user.home_id;
+      req.session.username = user.username;
 
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "2h",
-      });
-      return res.status(200).json({
-        message: "Login successful",
-        user: { id: user.id, username: user.username, email: user.email },
-        token,
-      });
+      res.redirect("/main.html"); // Redirect to the main page after login
     } else {
-      return res.status(401).json({ message: "Invalid password." });
+      res.status(401).json({ message: "Invalid email or password." });
     }
   } catch (error) {
     console.error("Error during login:", error);
-    return res.status(500).json({ message: "An unexpected error occurred." });
+    res.status(500).json({ message: "An unexpected error occurred." });
   }
 });
 
-//Logout Endpoint
+// Logout Endpoint
 app.post("/auth/logout", (req, res) => {
-  res.json({ message: "Logged out successfully" });
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Could not log out." });
+    }
+    res.redirect("/login.html");
+  });
+});
+
+// Main Page Endpoint (Protected Route)
+app.get("/main", isAuthenticated, (req, res) => {
+  res.sendFile("./client/public/main-page.html"); // Serve main page only if logged in
 });
 
 //Token Refresh Endpoint
