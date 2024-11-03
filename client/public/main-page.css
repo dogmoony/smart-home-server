@@ -24,7 +24,7 @@ body {
 }
 
 .transparent-container {
-    background-color: rgba(0, 0, 0, 0.3); /* Black with 50% transparency */
+    background-color: rgba(0, 0, 0, 0.4); /* Black with 50% transparency */
     color: white; /* Text color for visibility */
     padding: 20px;
     border-radius: 25px;

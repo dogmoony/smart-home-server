@@ -83,10 +83,14 @@ app.post("/auth/login", async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
 
     if (match) {
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+        expiresIn: "2h",
+      });
       // Passwords match, login successful
       return res.status(200).json({
         message: "Login successful",
-        user: { id: user.id, username: user.username, email: user.email }, // Return user info except the password
+        user: { id: user.id, username: user.username, email: user.email },
+        token,
       });
     } else {
       // Passwords do not match
