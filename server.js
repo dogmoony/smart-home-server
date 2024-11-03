@@ -89,7 +89,7 @@ app.post("/auth/login", async (req, res) => {
 
       res
         .status(200)
-        .json({ message: "Login successful", redirectUrl: "/main.html" });
+        .json({ message: "Login successful", redirectUrl: "/main-page.html" });
     } else {
       res.status(401).json({ message: "Invalid email or password." });
     }
