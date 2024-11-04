@@ -81,9 +81,15 @@ async function openUpdateModal(deviceId) {
         device.device_status;
     } else {
       console.error("Failed to load device data for update.");
+      document.getElementById("message").textContent =
+        "Failed to load device data.";
+      document.getElementById("message").style.color = "red";
     }
   } catch (error) {
     console.error("Error fetching device data:", error);
+    document.getElementById("message").textContent =
+      "Error fetching device data.";
+    document.getElementById("message").style.color = "red";
   }
 }
 
@@ -123,8 +129,9 @@ async function updateDevice(e) {
       fetchDevices(); // Refresh devices list
       closeUpdateModal(); // Close modal after successful update
     } else {
+      const errorMessage = await response.json(); // Attempt to get error message
       document.getElementById("message").textContent =
-        "Failed to update device.";
+        errorMessage.message || "Failed to update device.";
       document.getElementById("message").style.color = "red";
     }
   } catch (error) {
@@ -138,7 +145,7 @@ async function updateDevice(e) {
 // Event listener for the update form submission
 document
   .getElementById("update-device-form")
-  .addEventListener("submit", updateDevice); // Corrected
+  .addEventListener("submit", updateDevice);
 
 // Function to close the update modal
 function closeUpdateModal() {
