@@ -14,7 +14,9 @@ window.addEventListener("DOMContentLoaded", () => {
 async function fetchDevices() {
   try {
     // Fetch data from the backend API
-    const response = await fetch("http://localhost:5000/api/devices"); // Adjust URL if deployed
+    const response = await fetch(
+      "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com/:5000/api/devices"
+    ); // Adjust URL if deployed
 
     if (!response.ok) {
       throw new Error("Failed to fetch devices");
