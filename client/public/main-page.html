@@ -7,30 +7,31 @@
     <link rel="stylesheet" href="main-page.css">
 </head>
 <body>
-        <!-- Button to open the modal -->
-    <button id="open-modal-btn">Add Device</button>
-
-    <!-- Modal structure -->
-    <div id="modal">
-        <div id="modal-content">
-        <span id="close-btn">&times;</span> <!-- Close button -->
-        <h1>Add Device</h1>
-        <form id="add-device-form">
-            <label for="device_name">Device Name:</label>
-            <input type="text" id="device_name" required><br>
-
-            <label for="device_type">Device Type:</label>
-            <input type="text" id="device_type" required><br>
-
-            <label for="device_status">Device Status:</label>
-            <input type="text" id="device_status" required><br>
-
-            <button type="submit">Add Device</button>
-        </form>
-        <p id="message"></p>
-        </div>
-    </div>
+        
     <div class="transparent-container">
+            <!-- Button to open the modal -->
+        <button id="open-modal-btn">Add Device</button>
+
+        <!-- Modal structure -->
+        <div id="modal">
+            <div id="modal-content">
+            <span id="close-btn">&times;</span> <!-- Close button -->
+            <h1>Add Device</h1>
+            <form id="add-device-form">
+                <label for="device_name">Device Name:</label>
+                <input type="text" id="device_name" required><br>
+
+                <label for="device_type">Device Type:</label>
+                <input type="text" id="device_type" required><br>
+
+                <label for="device_status">Device Status:</label>
+                <input type="text" id="device_status" required><br>
+
+                <button type="submit">Add Device</button>
+            </form>
+            <p id="message"></p>
+            </div>
+        </div>
         <div id="device-container"></div>
         <p id="message"></p>
     </div>
