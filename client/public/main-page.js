@@ -59,6 +59,67 @@ async function fetchDevices(retry = true) {
   }
 }
 
+// Function to open the add device modal
+document.getElementById("open-modal-btn").addEventListener("click", () => {
+  document.getElementById("modal").style.display = "block";
+});
+
+// Function to close the modal
+document.getElementById("close-btn").addEventListener("click", () => {
+  document.getElementById("modal").style.display = "none";
+});
+
+// Close modal if the user clicks outside of it
+window.addEventListener("click", (event) => {
+  const modal = document.getElementById("modal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+// Function to add a device
+async function addDevice(e) {
+  e.preventDefault(); // Prevent default form submission
+  const device_name = document.getElementById("device_name").value;
+  const device_type = document.getElementById("device_type").value;
+  const device_status = document.getElementById("device_status").value;
+
+  try {
+    const response = await fetch(
+      "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ device_name, device_type, device_status }),
+      }
+    );
+
+    if (response.ok) {
+      document.getElementById("message").textContent =
+        "Device added successfully!";
+      document.getElementById("message").style.color = "green";
+      fetchDevices(); // Refresh devices list
+      closeAddDeviceModal(); // Close modal after successful addition
+    } else {
+      const errorMessage = await response.json();
+      document.getElementById("message").textContent =
+        errorMessage.message || "Failed to add device.";
+      document.getElementById("message").style.color = "red";
+    }
+  } catch (error) {
+    console.error("Error adding device:", error);
+    document.getElementById("message").textContent =
+      "An error occurred. Please try again.";
+    document.getElementById("message").style.color = "red";
+  }
+}
+
+// Event listener for the add device form submission
+document
+  .getElementById("add-device-form")
+  .addEventListener("submit", addDevice);
+
 // Function to delete a device
 async function deleteDevice(deviceId) {
   try {
