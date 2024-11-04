@@ -1,14 +1,3 @@
-// Check for the token on page load and fetch devices if authenticated
-window.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("authToken");
-  if (!token) {
-    window.location.href = "/login.html"; // Redirect if not logged in
-  } else {
-    document.getElementById("content").style.display = "block";
-    fetchDevices(); // Fetch devices after confirming the user is authenticated
-  }
-});
-
 /**
  * Function to fetch and display devices
  * Includes retry logic for session issues
@@ -52,6 +41,17 @@ async function fetchDevices(retry = true) {
     }
   }
 }
+
+// Check for the token on page load and fetch devices if authenticated
+window.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    window.location.href = "/login.html"; // Redirect if not logged in
+  } else {
+    document.getElementById("content").style.display = "block";
+    fetchDevices(); // Fetch devices after confirming the user is authenticated
+  }
+});
 
 // Modal functionality for adding devices
 document.addEventListener("DOMContentLoaded", () => {
