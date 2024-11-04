@@ -94,6 +94,7 @@ async function openUpdateModal(deviceId) {
 }
 
 // Function to update a device
+// Function to update a device
 async function updateDevice(e) {
   e.preventDefault(); // Prevent default form submission
   console.log("Update Device function triggered."); // Debugging statement
@@ -103,10 +104,11 @@ async function updateDevice(e) {
   const device_type = document.getElementById("update_device_type").value;
   const device_status = document.getElementById("update_device_status").value;
 
-  console.log("Device ID:", deviceId); // Debugging statement
-  console.log("Device Name:", device_name); // Debugging statement
-  console.log("Device Type:", device_type); // Debugging statement
-  console.log("Device Status:", device_status); // Debugging statement
+  // Log input values for debugging
+  console.log("Device ID:", deviceId);
+  console.log("Device Name:", device_name);
+  console.log("Device Type:", device_type);
+  console.log("Device Status:", device_status);
 
   try {
     const response = await fetch(
@@ -119,9 +121,12 @@ async function updateDevice(e) {
       }
     );
 
-    console.log("Response status:", response.status); // Debugging statement
+    console.log("Response status:", response.status); // Log response status for debugging
 
     if (response.ok) {
+      const result = await response.json(); // Parse response JSON if update was successful
+      console.log("Update result:", result); // Log the result of the update
+
       document.getElementById("message").textContent =
         "Device updated successfully!";
       document.getElementById("message").style.color = "green";
@@ -130,6 +135,7 @@ async function updateDevice(e) {
       closeUpdateModal(); // Close modal after successful update
     } else {
       const errorMessage = await response.json(); // Attempt to get error message
+      console.log("Error response:", errorMessage); // Log error response for debugging
       document.getElementById("message").textContent =
         errorMessage.message || "Failed to update device.";
       document.getElementById("message").style.color = "red";
@@ -145,12 +151,48 @@ async function updateDevice(e) {
 // Event listener for the update form submission
 document
   .getElementById("update-device-form")
-  .addEventListener("submit", updateDevice);
+  .addEventListener("submit", (e) => {
+    console.log("Update form submitted"); // Log form submission
+    updateDevice(e);
+  });
+
+// Function to open the update modal and pre-fill device data
+async function openUpdateModal(deviceId) {
+  const modal = document.getElementById("update-modal");
+  modal.style.display = "flex"; // Show the modal
+
+  try {
+    const response = await fetch(
+      `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
+      { credentials: "include" }
+    );
+
+    if (response.ok) {
+      const device = await response.json();
+      console.log("Device data fetched for update:", device); // Debugging statement
+
+      // Set values in the modal form
+      document.getElementById("update_device_id").value = device.device_id; // Ensure this input exists
+      document.getElementById("update_device_name").value = device.device_name;
+      document.getElementById("update_device_type").value = device.device_type;
+      document.getElementById("update_device_status").value =
+        device.device_status;
+    } else {
+      console.error("Failed to load device data for update.");
+      document.getElementById("message").textContent =
+        "Failed to load device data.";
+      document.getElementById("message").style.color = "red";
+    }
+  } catch (error) {
+    console.error("Error fetching device data:", error);
+  }
+}
 
 // Function to close the update modal
 function closeUpdateModal() {
   const modal = document.getElementById("update-modal");
   modal.style.display = "none"; // Set display to none to hide the modal
+  console.log("Update modal closed."); // Debugging statement
 }
 
 // Close update modal if the user clicks outside of it
@@ -160,6 +202,9 @@ window.addEventListener("click", (event) => {
     closeUpdateModal();
   }
 });
+
+// Make sure to fetch devices on load
+window.addEventListener("DOMContentLoaded", fetchDevices);
 
 // Function to delete a device
 async function deleteDevice(deviceId) {

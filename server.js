@@ -196,6 +196,7 @@ app.post("/api/devices", async (req, res) => {
   }
 });
 
+// Update Device Endpoint with Additional Logging
 app.put("/api/devices/:id", async (req, res) => {
   const deviceId = req.params.id;
   const homeId = req.session.homeId; // Ensure homeId is in the session
@@ -208,9 +209,6 @@ app.put("/api/devices/:id", async (req, res) => {
     device_type,
     device_status,
   }); // Log input values
-
-  // Log the entire request body
-  console.log("Request Body:", req.body);
 
   // Verify user authentication
   if (!homeId) {
@@ -229,6 +227,9 @@ app.put("/api/devices/:id", async (req, res) => {
       `,
       [device_name, device_type, device_status, deviceId, homeId]
     );
+
+    // Log the result of the query
+    console.log("Database update result:", result);
 
     // Check if any rows were updated
     if (result.rowCount === 0) {
