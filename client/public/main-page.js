@@ -90,11 +90,17 @@ async function openUpdateModal(deviceId) {
 // Function to update a device
 async function updateDevice(e) {
   e.preventDefault(); // Prevent default form submission
+  console.log("Update Device function triggered."); // Debugging statement
 
   const deviceId = document.getElementById("update_device_id").value; // Ensure this input exists
   const device_name = document.getElementById("update_device_name").value;
   const device_type = document.getElementById("update_device_type").value;
   const device_status = document.getElementById("update_device_status").value;
+
+  console.log("Device ID:", deviceId); // Debugging statement
+  console.log("Device Name:", device_name); // Debugging statement
+  console.log("Device Type:", device_type); // Debugging statement
+  console.log("Device Status:", device_status); // Debugging statement
 
   try {
     const response = await fetch(
@@ -106,6 +112,8 @@ async function updateDevice(e) {
         body: JSON.stringify({ device_name, device_type, device_status }),
       }
     );
+
+    console.log("Response status:", response.status); // Debugging statement
 
     if (response.ok) {
       document.getElementById("message").textContent =
