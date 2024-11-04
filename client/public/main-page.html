@@ -35,18 +35,19 @@
         <!-- Update Device Modal -->
         <div id="update-modal" style="display: none;">
             <div class="modal-content">
-            <span id="update-close-btn" onclick="closeUpdateModal()">×</span>
-            <h2>Update Device</h2>
-            <form id="update-device-form">
-                <input type="hidden" id="update_device_id">
-                <label for="update_device_name">Device Name:</label>
-                <input type="text" id="update_device_name" required>
-                <label for="update_device_type">Device Type:</label>
-                <input type="text" id="update_device_type" required>
-                <label for="update_device_status">Device Status:</label>
-                <input type="text" id="update_device_status" required>
-                <button type="submit">Update Device</button>
-            </form>
+                <span id="update-close-btn" onclick="closeUpdateModal()">×</span>
+                <h2>Update Device</h2>
+                <form id="update-device-form">
+                    <input type="hidden" id="update_device_id">
+                    <label for="update_device_name">Device Name:</label>
+                    <input type="text" id="update_device_name" required>
+                    <label for="update_device_type">Device Type:</label>
+                    <input type="text" id="update_device_type" required>
+                    <label for="update_device_status">Device Status:</label>
+                    <input type="text" id="update_device_status" required>
+                    <button type="submit">Update Device</button>
+                </form>
+                <p id="message"></p>
             </div>
         </div>
         <div id="device-container"></div>
