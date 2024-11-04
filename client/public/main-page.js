@@ -90,13 +90,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       // Send POST request to the backend add-device endpoint
-      const res = await fetch("http://localhost:5000/api/devices", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ device_name, device_type, device_status }),
-      });
+      const res = await fetch(
+        "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/main-page.html",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ device_name, device_type, device_status }),
+        }
+      );
 
       const result = await res.json();
 
