@@ -116,18 +116,21 @@ app.get("/main", isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, "client", "public", "main-page.html"));
 });
 
-//Get devices endpoint
+// Updated Get Devices Endpoint with Logging
 app.get("/api/devices", async (req, res) => {
-  const homeId = req.session.homeId; // Retrieve homeId consistently from session
+  const homeId = req.session.userId; // Assuming user’s home ID is stored in session
+
+  console.log("Fetching devices for session userId:", homeId); // Log the session ID for debugging
+
+  if (!homeId) {
+    return res.status(401).json({ message: "User is not authenticated." });
+  }
 
   try {
-    // Query the database for devices associated with this home ID
     const result = await pool.query(
       "SELECT * FROM devices WHERE home_id = $1",
       [homeId]
     );
-
-    // Respond with the devices as JSON
     res.json(result.rows);
   } catch (error) {
     console.error("Error fetching devices:", error);
@@ -136,6 +139,27 @@ app.get("/api/devices", async (req, res) => {
       .json({ message: "An error occurred while fetching devices" });
   }
 });
+
+//Get devices endpoint
+// app.get("/api/devices", async (req, res) => {
+//   const homeId = req.session.homeId; // Retrieve homeId consistently from session
+
+//   try {
+//     // Query the database for devices associated with this home ID
+//     const result = await pool.query(
+//       "SELECT * FROM devices WHERE home_id = $1",
+//       [homeId]
+//     );
+
+//     // Respond with the devices as JSON
+//     res.json(result.rows);
+//   } catch (error) {
+//     console.error("Error fetching devices:", error);
+//     res
+//       .status(500)
+//       .json({ message: "An error occurred while fetching devices" });
+//   }
+// });
 
 // Add Device Endpoint
 app.post("/api/devices", async (req, res) => {
