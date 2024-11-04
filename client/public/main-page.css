@@ -54,6 +54,7 @@ body {
     width: 300px;
     border-radius: 5px;
     text-align: center;
+    color: #000;
   }
 
   #close-btn {
