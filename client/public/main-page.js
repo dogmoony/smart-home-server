@@ -7,6 +7,7 @@ window.addEventListener("DOMContentLoaded", () => {
   } else {
     // Show content if token is present
     document.getElementById("content").style.display = "block";
+    fetchDevices(); // Fetch devices once the token is confirmed
   }
 });
 
@@ -15,8 +16,14 @@ async function fetchDevices() {
   try {
     // Fetch data from the backend API
     const response = await fetch(
-      "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com/:5000/api/devices"
-    ); // Adjust URL if deployed
+      "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Include token if required by backend
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch devices");
@@ -50,9 +57,8 @@ async function fetchDevices() {
     document.getElementById("message").textContent = error.message;
   }
 }
-// Call the function to fetch and display devices
-fetchDevices();
 
+// Modal and form handling for adding a new device
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("modal");
   const openModalBtn = document.getElementById("open-modal-btn");
@@ -91,10 +97,11 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       // Send POST request to the backend add-device endpoint
       const res = await fetch(
-        "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/main-page.html",
+        "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices",
         {
           method: "POST",
           headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Include token if required by backend
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ device_name, device_type, device_status }),
@@ -110,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         form.reset(); // Clear form fields
         setTimeout(() => {
           modal.style.display = "none"; // Hide the modal after a short delay
+          fetchDevices(); // Refresh the devices list
         }, 1500);
       } else {
         messageElement.textContent = result.message || "Failed to add device";
