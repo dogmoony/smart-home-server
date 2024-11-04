@@ -76,6 +76,9 @@ async function openUpdateModal(deviceId) {
 
     if (response.ok) {
       const device = await response.json();
+      console.log("Fetched device for update:", device); // Debugging log
+
+      // Set values in the modal form
       document.getElementById("update_device_id").value = device.device_id;
       document.getElementById("update_device_name").value = device.device_name;
       document.getElementById("update_device_type").value = device.device_type;
@@ -91,12 +94,14 @@ async function openUpdateModal(deviceId) {
 
 // Function to update a device
 async function updateDevice(e) {
-  e.preventDefault();
+  e.preventDefault(); // Prevent default form submission
 
   const deviceId = document.getElementById("update_device_id").value;
   const device_name = document.getElementById("update_device_name").value;
   const device_type = document.getElementById("update_device_type").value;
   const device_status = document.getElementById("update_device_status").value;
+
+  console.log("Updating device with ID:", deviceId); // Debugging log
 
   try {
     const response = await fetch(
@@ -113,8 +118,11 @@ async function updateDevice(e) {
       document.getElementById("message").textContent =
         "Device updated successfully!";
       document.getElementById("message").style.color = "green";
+
+      console.log("Device updated:", await response.json()); // Debugging log
+
       fetchDevices(); // Refresh devices list
-      closeUpdateModal();
+      closeUpdateModal(); // Close modal after successful update
     } else {
       document.getElementById("message").textContent =
         "Failed to update device.";
@@ -128,23 +136,10 @@ async function updateDevice(e) {
   }
 }
 
-// Function to close the update modal
-function closeUpdateModal() {
-  document.getElementById("update-modal").style.display = "none";
-}
-
 // Add event listener for the update form submission
 document
   .getElementById("update-device-form")
   .addEventListener("submit", updateDevice);
-
-// Close update modal if the user clicks outside of it
-window.addEventListener("click", (event) => {
-  const modal = document.getElementById("update-modal");
-  if (event.target === modal) {
-    closeUpdateModal();
-  }
-});
 
 // Function to delete a device
 async function deleteDevice(deviceId) {
