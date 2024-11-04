@@ -11,7 +11,6 @@ async function fetchDevices(retry = true) {
     }
 
     const devices = await response.json();
-
     const container = document.getElementById("device-container");
     container.innerHTML = ""; // Clear previous content
 
@@ -63,7 +62,7 @@ async function fetchDevices(retry = true) {
 // Function to open the update modal and pre-fill device data
 async function openUpdateModal(deviceId) {
   const modal = document.getElementById("update-modal");
-  modal.style.display = "flex";
+  modal.style.display = "flex"; // Show the modal
 
   try {
     const response = await fetch(
@@ -75,7 +74,7 @@ async function openUpdateModal(deviceId) {
       const device = await response.json();
 
       // Set values in the modal form
-      document.getElementById("update_device_id").value = device.device_id;
+      document.getElementById("update_device_id").value = device.device_id; // Ensure this input exists
       document.getElementById("update_device_name").value = device.device_name;
       document.getElementById("update_device_type").value = device.device_type;
       document.getElementById("update_device_status").value =
@@ -92,7 +91,7 @@ async function openUpdateModal(deviceId) {
 async function updateDevice(e) {
   e.preventDefault(); // Prevent default form submission
 
-  const deviceId = document.getElementById("update_device_id").value;
+  const deviceId = document.getElementById("update_device_id").value; // Ensure this input exists
   const device_name = document.getElementById("update_device_name").value;
   const device_type = document.getElementById("update_device_type").value;
   const device_status = document.getElementById("update_device_status").value;
@@ -131,7 +130,7 @@ async function updateDevice(e) {
 // Event listener for the update form submission
 document
   .getElementById("update-device-form")
-  .addEventListener("submit", updateDevice());
+  .addEventListener("submit", updateDevice); // Corrected
 
 // Function to close the update modal
 function closeUpdateModal() {
