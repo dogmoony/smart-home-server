@@ -35,3 +35,29 @@ body {
     backdrop-filter: blur(6px); /* Applies blur effect to the background */
     -webkit-backdrop-filter: blur(10px); /* Safari support */
   }
+
+  #modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+  }
+
+  #modal-content {
+    background-color: #fff;
+    padding: 20px;
+    width: 300px;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  #close-btn {
+    float: right;
+    cursor: pointer;
+    color: red;
+  }

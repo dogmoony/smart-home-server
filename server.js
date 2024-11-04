@@ -136,27 +136,49 @@ app.get("/api/devices", async (req, res) => {
   }
 });
 
-//Add Device Endpoint
-app.post("/api/devices", (req, res) => {
-  const { name, type } = req.body;
+// Add Device Endpoint
+app.post("/api/devices", async (req, res) => {
+  const { device_name, device_type, device_status } = req.body;
+  const home_id = req.session.home_id; // Retrieve home_id from the session
 
-  // Basic validation
-  if (!name || !type) {
-    return res.status(400).json({ message: "Name and type are required" });
+  // Check if home_id is available in the session
+  if (!home_id) {
+    return res.status(401).json({ message: "User is not authenticated." });
   }
 
-  // Create a new device object
-  const newDevice = {
-    id: devices.length + 1, // Simple ID generation
-    name,
-    type,
-  };
+  // Check if all required fields are provided
+  if (!device_name || !device_type || !device_status) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
 
-  // Add the new device to the devices array
-  devices.push(newDevice);
+  try {
+    // Insert the new device into the database
+    const query = `
+      INSERT INTO devices (home_id, device_name, device_type, device_status)
+      VALUES ($1, $2, $3, $4)
+      RETURNING device_id, home_id, device_name, device_type, device_status, created_at;
+    `;
+    const values = [home_id, device_name, device_type, device_status];
 
-  // Respond with the newly created device
-  res.status(201).json(newDevice);
+    const result = await pool.query(query, values);
+
+    // Send back the newly created device details
+    res.status(201).json({
+      message: "Device added successfully",
+      device: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error adding device:", error);
+
+    if (error.code === "23503") {
+      // Foreign key violation
+      return res
+        .status(400)
+        .json({ message: "Invalid home_id. Home does not exist." });
+    }
+
+    res.status(500).json({ message: "An unexpected error occurred." });
+  }
 });
 
 //Update Device Endpoint
