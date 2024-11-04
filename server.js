@@ -136,6 +136,14 @@ app.get("/api/devices", async (req, res) => {
       "SELECT * FROM devices WHERE home_id = $1",
       [homeId]
     ); // Query devices by home_id
+
+    if (result.rows.length === 0) {
+      console.log(`No devices found for homeId: ${homeId}`); // Log when no devices are found
+      return res
+        .status(404)
+        .json({ message: "No devices found for this user." }); // Respond with 404 if no devices found
+    }
+
     res.json(result.rows); // Respond with the list of devices
   } catch (error) {
     console.error("Error fetching devices:", error); // Log error details
