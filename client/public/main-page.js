@@ -131,7 +131,7 @@ async function updateDevice(e) {
 // Event listener for the update form submission
 document
   .getElementById("update-device-form")
-  .addEventListener("submit", updateDevice);
+  .addEventListener("submit", updateDevice());
 
 // Function to close the update modal
 function closeUpdateModal() {
