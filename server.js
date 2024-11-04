@@ -196,19 +196,21 @@ app.post("/api/devices", async (req, res) => {
   }
 });
 
-// Update Device Endpoint with Additional Logging
 app.put("/api/devices/:id", async (req, res) => {
   const deviceId = req.params.id;
   const homeId = req.session.homeId; // Ensure homeId is in the session
   const { device_name, device_type, device_status } = req.body;
 
+  // Log the incoming request and session
   console.log("Update request for device:", {
     deviceId,
     homeId,
     device_name,
     device_type,
     device_status,
-  }); // Log input values
+  });
+  console.log("Request Body:", req.body);
+  console.log("Session Data:", req.session);
 
   // Verify user authentication
   if (!homeId) {
@@ -245,7 +247,10 @@ app.put("/api/devices/:id", async (req, res) => {
       device: result.rows[0],
     });
   } catch (error) {
-    console.error("Error updating device:", error); // Log any errors
+    console.error("Error updating device:", error);
+    if (error.code === "ECONNREFUSED") {
+      return res.status(500).json({ message: "Database connection failed." });
+    }
     res.status(500).json({ message: "An unexpected error occurred." });
   }
 });
