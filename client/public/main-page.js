@@ -141,6 +141,14 @@ document
   .getElementById("update-device-form")
   .addEventListener("submit", updateDevice);
 
+// Close update modal if the user clicks outside of it
+window.addEventListener("click", (event) => {
+  const modal = document.getElementById("update-modal");
+  if (event.target === modal) {
+    closeUpdateModal();
+  }
+});
+
 // Function to delete a device
 async function deleteDevice(deviceId) {
   try {
