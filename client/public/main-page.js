@@ -48,8 +48,8 @@ window.addEventListener("DOMContentLoaded", () => {
   if (!token) {
     window.location.href = "/login.html"; // Redirect if not logged in
   } else {
-    document.getElementById("content").style.display = "block";
-    fetchDevices(); // Fetch devices after confirming the user is authenticated
+    document.getElementById("device-container").style.display = "block";
+    fetchDevices(true); // Fetch devices after confirming the user is authenticated
   }
 });
 
