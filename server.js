@@ -84,7 +84,7 @@ app.post("/auth/login", async (req, res) => {
     const user = result.rows[0];
     const match = await bcrypt.compare(password, user.password);
     if (match) {
-      req.session.userId = user.home_id;
+      req.session.homeId = user.home_id; // Save home_id in session consistently
       req.session.username = user.username;
 
       res
@@ -116,8 +116,9 @@ app.get("/main", isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, "client", "public", "main-page.html"));
 });
 
+//Get devices endpoint
 app.get("/api/devices", async (req, res) => {
-  const homeId = req.session.userId; // Assuming user’s home ID is stored in session
+  const homeId = req.session.homeId; // Retrieve homeId consistently from session
 
   try {
     // Query the database for devices associated with this home ID
@@ -139,10 +140,10 @@ app.get("/api/devices", async (req, res) => {
 // Add Device Endpoint
 app.post("/api/devices", async (req, res) => {
   const { device_name, device_type, device_status } = req.body;
-  const home_id = req.session.home_id; // Retrieve home_id from the session
+  const homeId = req.session.homeId; // Retrieve homeId consistently from session
 
-  // Check if home_id is available in the session
-  if (!home_id) {
+  // Check if homeId is available in the session
+  if (!homeId) {
     return res.status(401).json({ message: "User is not authenticated." });
   }
 
@@ -158,7 +159,7 @@ app.post("/api/devices", async (req, res) => {
       VALUES ($1, $2, $3, $4)
       RETURNING device_id, home_id, device_name, device_type, device_status, created_at;
     `;
-    const values = [home_id, device_name, device_type, device_status];
+    const values = [homeId, device_name, device_type, device_status];
 
     const result = await pool.query(query, values);
 
