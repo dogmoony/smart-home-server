@@ -117,7 +117,7 @@ app.get("/main", isAuthenticated, (req, res) => {
 });
 
 app.get("/api/devices", async (req, res) => {
-  const homeId = req.session.userHomeId; // Assuming user’s home ID is stored in session
+  const homeId = req.session.userId; // Assuming user’s home ID is stored in session
 
   try {
     // Query the database for devices associated with this home ID
