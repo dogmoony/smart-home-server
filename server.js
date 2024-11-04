@@ -196,21 +196,42 @@ app.post("/api/devices", async (req, res) => {
   }
 });
 
-//Update Device Endpoint
-app.put("/api/devices/:id", (req, res) => {
-  const { id } = req.params;
-  const { name, type } = req.body;
+// Update Device Endpoint
+app.put("/api/devices/:id", async (req, res) => {
+  const deviceId = req.params.id;
+  const homeId = req.session.homeId; // Ensure homeId is in the session
+  const { device_name, device_type, device_status } = req.body;
 
-  // Find the device with the given ID
-  const device = devices.find((device) => device.id === parseInt(id));
+  // Verify user authentication
+  if (!homeId) {
+    return res.status(401).json({ message: "User is not authenticated." });
+  }
 
-  // If the device is found, update its name and type
-  if (device) {
-    device.name = name;
-    device.type = type;
-    res.json(device);
-  } else {
-    res.status(404).json({ message: "Device not found" });
+  try {
+    // Update the device in the database
+    const result = await pool.query(
+      `
+      UPDATE devices 
+      SET device_name = $1, device_type = $2, device_status = $3 
+      WHERE device_id = $4 AND home_id = $5 
+      RETURNING *;
+      `,
+      [device_name, device_type, device_status, deviceId, homeId]
+    );
+
+    if (result.rowCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "Device not found or access denied." });
+    }
+
+    res.json({
+      message: "Device updated successfully",
+      device: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error updating device:", error);
+    res.status(500).json({ message: "An unexpected error occurred." });
   }
 });
 
