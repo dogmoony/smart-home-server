@@ -1,47 +1,36 @@
-// Check for the token on page load
+// Check for the token on page load and fetch devices
 window.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    // Redirect to login page if no token is found
-    window.location.href = "/login.html";
+    window.location.href = "/login.html"; // Redirect if not logged in
   } else {
-    // Show content if token is present
     document.getElementById("content").style.display = "block";
-    fetchDevices(); // Fetch devices once the token is confirmed
+    fetchDevices(); // Call fetchDevices only after confirming the user is authenticated
   }
 });
 
 // Function to fetch and display devices
 async function fetchDevices() {
   try {
-    // Fetch data from the backend API
     const response = await fetch(
       "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices",
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Include token if required by backend
-          "Content-Type": "application/json",
-        },
-      }
+      { credentials: "include" } // Include credentials to use session for authentication
     );
 
     if (!response.ok) {
       throw new Error("Failed to fetch devices");
     }
 
-    // Parse the response JSON
     const devices = await response.json();
 
-    // Display devices in the HTML
+    // Display devices
     const container = document.getElementById("device-container");
-    container.innerHTML = ""; // Clear any existing content
+    container.innerHTML = ""; // Clear previous content
 
     devices.forEach((device) => {
-      // Create a new div for each device
       const deviceDiv = document.createElement("div");
       deviceDiv.classList.add("device");
 
-      // Populate the div with device data
       deviceDiv.innerHTML = `
         <h2>${device.device_name}</h2>
         <p>Type: ${device.device_type}</p>
@@ -49,7 +38,6 @@ async function fetchDevices() {
         <p>Created At: ${new Date(device.created_at).toLocaleString()}</p>
       `;
 
-      // Append the device div to the container
       container.appendChild(deviceDiv);
     });
   } catch (error) {
@@ -58,7 +46,7 @@ async function fetchDevices() {
   }
 }
 
-// Modal and form handling for adding a new device
+// Modal submission handling
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("modal");
   const openModalBtn = document.getElementById("open-modal-btn");
@@ -66,18 +54,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("add-device-form");
   const messageElement = document.getElementById("message");
 
-  // Show the modal when the "Add Device" button is clicked
   openModalBtn.addEventListener("click", () => {
     modal.style.display = "flex";
   });
 
-  // Hide the modal when the close button is clicked
   closeModalBtn.addEventListener("click", () => {
     modal.style.display = "none";
-    messageElement.textContent = ""; // Clear any previous message
+    messageElement.textContent = "";
   });
 
-  // Hide the modal when clicking outside of the modal content
   window.addEventListener("click", (event) => {
     if (event.target === modal) {
       modal.style.display = "none";
@@ -87,37 +72,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Handle form submission
   form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
 
-    // Get input values
     const device_name = document.getElementById("device_name").value;
     const device_type = document.getElementById("device_type").value;
     const device_status = document.getElementById("device_status").value;
 
     try {
-      // Send POST request to the backend add-device endpoint
       const res = await fetch(
         "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices",
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Include token if required by backend
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", // Include credentials to send session cookies
           body: JSON.stringify({ device_name, device_type, device_status }),
         }
       );
 
       const result = await res.json();
 
-      // Display success or error message
       if (res.ok) {
         messageElement.textContent = "Device added successfully!";
         messageElement.style.color = "green";
-        form.reset(); // Clear form fields
+        form.reset();
+
+        // Refresh the device list without reloading the page
+        fetchDevices();
+
         setTimeout(() => {
-          modal.style.display = "none"; // Hide the modal after a short delay
-          fetchDevices(); // Refresh the devices list
+          modal.style.display = "none";
         }, 1500);
       } else {
         messageElement.textContent = result.message || "Failed to add device";
