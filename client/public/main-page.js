@@ -148,13 +148,16 @@ async function updateDevice(e) {
   }
 }
 
-// Event listener for the update form submission
-document
-  .getElementById("update-device-form")
-  .addEventListener("submit", (e) => {
-    console.log("Update form submitted"); // Log form submission
-    updateDevice(e);
-  });
+// Make sure this code runs after the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM fully loaded and parsed. Attaching event listeners.");
+  document
+    .getElementById("update-device-form")
+    .addEventListener("submit", (e) => {
+      console.log("Update form submitted."); // Log when the form is submitted
+      updateDevice(e);
+    });
+});
 
 // Function to open the update modal and pre-fill device data
 async function openUpdateModal(deviceId) {
