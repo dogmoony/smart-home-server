@@ -141,10 +141,17 @@ document
   .getElementById("update-device-form")
   .addEventListener("submit", updateDevice);
 
+// Function to close the update modal
+function closeUpdateModal() {
+  const modal = document.getElementById("update-modal");
+  modal.style.display = "none"; // Set display to none to hide the modal
+}
+
 // Close update modal if the user clicks outside of it
 window.addEventListener("click", (event) => {
   const modal = document.getElementById("update-modal");
   if (event.target === modal) {
+    // Check if the click is outside the modal content
     closeUpdateModal();
   }
 });
