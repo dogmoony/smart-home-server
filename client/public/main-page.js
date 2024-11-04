@@ -28,8 +28,19 @@ async function fetchDevices(retry = true) {
         <p>Type: ${device.device_type}</p>
         <p>Status: ${device.device_status}</p>
         <p>Created At: ${new Date(device.created_at).toLocaleString()}</p>
+        <button class="delete-button" data-id="${
+          device.device_id
+        }">Delete</button>
       `;
       container.appendChild(deviceDiv);
+    });
+
+    // Attach delete button functionality to each button
+    document.querySelectorAll(".delete-button").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const deviceId = event.target.getAttribute("data-id");
+        deleteDevice(deviceId);
+      });
     });
   } catch (error) {
     console.error("Error fetching devices:", error);
@@ -39,6 +50,40 @@ async function fetchDevices(retry = true) {
     if (retry) {
       setTimeout(() => fetchDevices(false), 1000); // Retry after 1 second
     }
+  }
+}
+
+// Function to delete a device
+async function deleteDevice(deviceId) {
+  try {
+    const response = await fetch(
+      `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
+      {
+        method: "DELETE",
+        credentials: "include", // Include credentials for session authentication
+      }
+    );
+
+    if (response.ok) {
+      // Remove the device element from the UI
+      document
+        .querySelector(`button[data-id="${deviceId}"]`)
+        .parentElement.remove();
+
+      document.getElementById("message").textContent =
+        "Device deleted successfully";
+      document.getElementById("message").style.color = "green";
+    } else {
+      const result = await response.json();
+      document.getElementById("message").textContent =
+        result.message || "Failed to delete device";
+      document.getElementById("message").style.color = "red";
+    }
+  } catch (error) {
+    console.error("Error deleting device:", error);
+    document.getElementById("message").textContent =
+      "An error occurred. Please try again.";
+    document.getElementById("message").style.color = "red";
   }
 }
 

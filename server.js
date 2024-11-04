@@ -214,19 +214,46 @@ app.put("/api/devices/:id", (req, res) => {
   }
 });
 
-//Delete Device Endpoint
-app.delete("/api/devices/:id", (req, res) => {
-  const { id } = req.params;
+// Delete Device Endpoint
+app.delete("/api/devices/:id", async (req, res) => {
+  const deviceId = req.params.id;
+  const homeId = req.session.homeId; // Retrieve home_id from the session
 
-  // Find the device with the given ID
-  const index = devices.findIndex((device) => device.id === parseInt(id));
+  if (!homeId) {
+    return res.status(401).json({ message: "User is not authenticated." });
+  }
 
-  // If the device is found, remove it from the devices array
-  if (index !== -1) {
-    devices.splice(index, 1);
-    res.status(204).json({ message: "Device deleted successfully" });
-  } else {
-    res.status(404).json({ message: "Device not found" });
+  try {
+    // Check if the device belongs to the user's home
+    const findDeviceQuery = `
+      SELECT * FROM devices 
+      WHERE device_id = $1 AND home_id = $2
+    `;
+    const findDeviceResult = await pool.query(findDeviceQuery, [
+      deviceId,
+      homeId,
+    ]);
+
+    if (findDeviceResult.rows.length === 0) {
+      // Device not found or does not belong to the user's home
+      return res
+        .status(404)
+        .json({ message: "Device not found or access denied." });
+    }
+
+    // Delete the device if it belongs to the user's home
+    const deleteDeviceQuery = `
+      DELETE FROM devices 
+      WHERE device_id = $1 AND home_id = $2
+    `;
+    await pool.query(deleteDeviceQuery, [deviceId, homeId]);
+
+    res.status(200).json({ message: "Device deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting device:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting the device." });
   }
 });
 
