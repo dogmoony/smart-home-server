@@ -172,4 +172,11 @@ function showPage(pageId) {
   // Show the selected page
   const selectedPage = document.getElementById(pageId);
   selectedPage.classList.add("active");
+
+  // Update the active button
+  const buttons = document.querySelectorAll(".menu-panel button");
+  buttons.forEach((button) => button.classList.remove("active"));
+
+  // Add active class to the clicked button
+  event.target.classList.add("active");
 }

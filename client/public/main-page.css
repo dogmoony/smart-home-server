@@ -98,10 +98,11 @@ body {
     background-color: rgba(255, 255, 255, 0.1); /* Slightly visible background on hover */
   }
 
-/* Active State */
-.menu-panel.page.active button {
-    color: #fff;
-    background-color: rgba(255, 255, 255, 0.2); /* Visible background for active button */
+
+  .menu-panel button.active {
+    background-color: white;
+    color: black;
+    font-weight: bold; /* Optional: to make the active button stand out */
   }
 
 
