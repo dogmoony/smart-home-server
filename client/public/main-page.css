@@ -67,6 +67,7 @@ body {
 .menu-panel {
     display: flex;
     flex-wrap: wrap;
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
