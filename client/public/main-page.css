@@ -37,7 +37,7 @@ body {
     -webkit-backdrop-filter: blur(10px); /* Safari support */
   }
 
-  #modal, #update-modal {
+#modal, #update-modal {
     display: none; /* Hidden by default */
     position: fixed;
     top: 0;
@@ -49,7 +49,7 @@ body {
     align-items: center;
   }
 
-  #modal-content {
+#modal-content {
     background-color: #fff;
     padding: 20px;
     width: 300px;
@@ -58,14 +58,14 @@ body {
     color: #000;
   }
 
-  #close-btn {
+#close-btn {
     float: right;
     cursor: pointer;
     color: red;
   }
 
 .menu-panel {
-    display: flex;
+    display:inline-flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
