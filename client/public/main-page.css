@@ -66,6 +66,9 @@ body {
 
 .menu-panel {
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
     position: fixed;
     bottom: 0;
