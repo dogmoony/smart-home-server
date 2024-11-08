@@ -99,7 +99,7 @@ body {
   }
 
 /* Active State */
-.menu-panel button.page.active {
+button .page.active {
     color: #fff;
     background-color: rgba(255, 255, 255, 0.2); /* Visible background for active button */
   }
