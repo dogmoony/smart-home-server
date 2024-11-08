@@ -9,6 +9,13 @@
 <body>
 
     <div class="transparent-container">
+        <!-- Navigation Menu -->
+            <div class="menu-panel">
+                <button onclick="showPage('home')">Home</button>
+                <button onclick="showPage('smart')">Smart</button>
+                <button onclick="showPage('activity')">Activity</button>
+                <button onclick="showPage('my-account')">My Account</button>
+            </div>
             <!-- Button to open the modal -->
         <button id="open-modal-btn">Add Device</button>
 
@@ -31,13 +38,7 @@
             </form>
             <p id="message"></p>
             </div>
-                        <!-- Navigation Menu -->
-                        <div class="menu-panel">
-                            <button onclick="showPage('home')">Home</button>
-                            <button onclick="showPage('smart')">Smart</button>
-                            <button onclick="showPage('activity')">Activity</button>
-                            <button onclick="showPage('my-account')">My Account</button>
-                        </div>
+                        
         </div>
         <div id="device-container"></div>
         <p id="message"></p>
