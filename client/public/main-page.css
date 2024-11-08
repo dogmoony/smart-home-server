@@ -100,7 +100,7 @@ body {
 
 
   .menu-panel button.active {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.4);
     color: black;
     font-weight: bold; /* Optional: to make the active button stand out */
   }
