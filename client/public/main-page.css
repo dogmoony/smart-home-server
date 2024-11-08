@@ -103,3 +103,18 @@ body {
     color: #fff;
     background-color: rgba(255, 255, 255, 0.2); /* Visible background for active button */
   }
+
+
+/* Content Sections */
+.content-container {
+    padding: 20px;
+  }
+  
+  .page {
+    display: none; /* Hidden by default */
+  }
+  
+  .page.active {
+    display: block; /* Show only the active page */
+  }
+  
