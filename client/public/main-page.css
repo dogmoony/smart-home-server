@@ -109,6 +109,7 @@ body {
 /* Content Sections */
 .content-container {
     padding: 20px;
+    padding-top: 10px;
   }
   
   .page {
@@ -134,5 +135,4 @@ body {
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  column-gap: 0;
 }
