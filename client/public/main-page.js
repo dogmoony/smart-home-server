@@ -8,7 +8,7 @@ fetch("/username")
   .then((data) => {
     document.getElementById(
       "greeting"
-    ).textContent = `Welcome, ${data.username}!`;
+    ).textContent = `Welcome to your smart home, ${data.username}!`;
   })
   .catch((error) => {
     console.error("Error fetching username:", error);
