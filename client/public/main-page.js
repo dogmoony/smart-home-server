@@ -1,3 +1,13 @@
+// Retrieve the user's name from localStorage
+const username = localStorage.getItem("username");
+
+// Check if the name exists and update the greeting
+if (username) {
+  document.getElementById("greeting").textContent = `Hello, ${username}!`;
+} else {
+  document.getElementById("greeting").textContent = `Hello!`;
+}
+
 // Function to fetch and display devices
 async function fetchDevices(retry = true) {
   try {
