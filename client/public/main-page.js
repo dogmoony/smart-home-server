@@ -12,7 +12,7 @@ fetch("/username")
   })
   .catch((error) => {
     console.error("Error fetching username:", error);
-    window.location.href = "/login"; // Redirect to login if unauthorized
+    window.location.href = "/auth/login"; // Redirect to login if unauthorized
   });
 
 // Function to fetch and display devices

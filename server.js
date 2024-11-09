@@ -126,7 +126,7 @@ app.post("/auth/logout", (req, res) => {
 // Main Page Endpoint (Protected Route)
 app.get("/main", (req, res) => {
   if (!req.session.username) {
-    return res.redirect("/login");
+    return res.redirect("/auth/login");
   }
   res.sendFile(path.join(__dirname, "client", "public", "main-page.html"));
 });
