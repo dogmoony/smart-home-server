@@ -118,4 +118,8 @@ body {
   .page.active {
     display: block; /* Show only the active page */
   }
-  
+
+#home {
+  background-color: #cb1111;
+  width: 100%;
+}
