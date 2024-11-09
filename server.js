@@ -103,6 +103,13 @@ app.post("/auth/login", async (req, res) => {
   }
 });
 
+app.get("/username", (req, res) => {
+  if (!req.session.username) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  res.json({ username: req.session.username });
+});
+
 // Logout Endpoint
 app.post("/auth/logout", (req, res) => {
   req.session.destroy((err) => {
@@ -117,8 +124,11 @@ app.post("/auth/logout", (req, res) => {
 });
 
 // Main Page Endpoint (Protected Route)
-app.get("/main", isAuthenticated, (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "public", "main-page.html")); // Serve the main page if authenticated
+app.get("/main", (req, res) => {
+  if (!req.session.username) {
+    return res.redirect("/login");
+  }
+  res.sendFile(path.join(__dirname, "client", "public", "main-page.html"));
 });
 
 // Updated Get Devices Endpoint with Logging

@@ -1,12 +1,19 @@
-// Retrieve the user's name from localStorage
-const username = localStorage.getItem("username");
-
-// Check if the name exists and update the greeting
-if (username) {
-  document.getElementById("greeting").textContent = `Hello, ${username}!`;
-} else {
-  document.getElementById("greeting").textContent = `Hello!`;
-}
+fetch("/username")
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Not logged in");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    document.getElementById(
+      "greeting"
+    ).textContent = `Welcome, ${data.username}!`;
+  })
+  .catch((error) => {
+    console.error("Error fetching username:", error);
+    window.location.href = "/login"; // Redirect to login if unauthorized
+  });
 
 // Function to fetch and display devices
 async function fetchDevices(retry = true) {
