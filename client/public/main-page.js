@@ -104,7 +104,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-function showPage(pageId) {
+function showPage(pageId, event) {
   // Hide all pages
   const pages = document.querySelectorAll(".page");
   pages.forEach((page) => {
