@@ -119,3 +119,7 @@ body {
   .page.active {
     display: block; /* Show only the active page */
   }
+
+  .home {
+    background-color: #630404;
+  }
