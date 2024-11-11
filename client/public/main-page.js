@@ -94,6 +94,25 @@ window.addEventListener("click", (event) => {
   }
 });
 
+async function addDevice(name, type) {
+  try {
+    const response = await fetch("/api/devices", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, type }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log("Device added:", data.device);
+    } else {
+      console.error("Error:", data.message);
+    }
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+}
+
 // Check for the token on page load and fetch devices if authenticated
 window.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("authToken");
