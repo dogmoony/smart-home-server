@@ -194,7 +194,7 @@ app.post("/api/devices", async (req, res) => {
   try {
     // Insert device into the database and return the newly created device
     const result = await pool.query(
-      "INSERT INTO devices (home_id, name, type) VALUES ($1, $2, $3) RETURNING *",
+      "INSERT INTO devices (home_id, device_name, device_type) VALUES ($1, $2, $3) RETURNING *",
       [homeId, name, type]
     );
 
