@@ -177,7 +177,42 @@ app.get("/api/devices", async (req, res) => {
 //------------------------------------------------------------------------------
 
 // Add Device Endpoint
-app.post("/api/devices", async (req, res) => {});
+app.post("/api/devices", async (req, res) => {
+  const homeId = req.session.homeId; // Retrieve home_id from session
+
+  if (!homeId) {
+    return res.status(401).json({ message: "User is not authenticated." }); // Check if user is authenticated
+  }
+
+  const { name, type } = req.body; // Extract device name and type from request body
+
+  if (!name || !type) {
+    return res.status(400).json({ message: "Name and type are required." }); // Check if name and type are provided
+  } else {
+    try {
+      const result = await pool.query(
+        "INSERT INTO devices (home_id, name, type) VALUES ($1, $2, $3)",
+        [homeId, name, type]
+      );
+      res
+        .status(201)
+        .json({ message: "Device added successfully", device: result.rows[0] });
+    } catch (error) {
+      console.error("Error adding device:", error);
+      if (error.code === "23505") {
+        return res
+          .status(400)
+          .json({
+            message: "Device with the same name already exists for this user.",
+          });
+      } else {
+        return res
+          .status(500)
+          .json({ message: "An unexpected error occurred." });
+      }
+    }
+  }
+});
 
 // Delete Device Endpoint
 app.delete("/api/devices/:id", async (req, res) => {});
