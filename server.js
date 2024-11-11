@@ -185,7 +185,7 @@ app.post("/api/devices", async (req, res) => {
     return res.status(401).json({ message: "User is not authenticated." });
   }
 
-  const { name, type } = req.body; // Extract device name and type from request body
+  const { name, type, status } = req.body; // Extract device name and type from request body
 
   if (!name || !type) {
     return res.status(400).json({ message: "Name and type are required." });
@@ -194,8 +194,8 @@ app.post("/api/devices", async (req, res) => {
   try {
     // Insert device into the database and return the newly created device
     const result = await pool.query(
-      "INSERT INTO devices (home_id, device_name, device_type) VALUES ($1, $2, $3) RETURNING *",
-      [homeId, name, type]
+      "INSERT INTO devices (home_id, device_name, device_type, device_status) VALUES ($1, $2, $3, $4) RETURNING *",
+      [homeId, name, type, status]
     );
 
     res

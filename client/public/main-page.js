@@ -85,6 +85,7 @@ document
     // Collect data from form fields
     const name = document.getElementById("device_name").value;
     const type = document.getElementById("device_type").value;
+    const status = document.getElementById("device_status").value;
 
     // Display a loading message or disable submit button temporarily
     const messageElement = document.getElementById("message");
@@ -95,7 +96,7 @@ document
       const response = await fetch("/api/devices", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, type }), // Send form data in request body
+        body: JSON.stringify({ name, type, status }), // Send form data in request body
       });
 
       // Parse the JSON response
