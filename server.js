@@ -77,14 +77,6 @@ app.post("/auth/create", async (req, res) => {
 //------------------------------------------------------------------------------
 
 // Middleware to check if the user is authenticated
-function isAuthenticated(req, res, next) {
-  if (req.session.homeId) {
-    // Check if homeId is stored in the session
-    return next(); // If authenticated, proceed to the next middleware/route
-  } else {
-    res.status(401).json({ message: "Unauthorized" }); // Send unauthorized response if not authenticated
-  }
-}
 
 // Login Endpoint
 app.post("/auth/login", async (req, res) => {
