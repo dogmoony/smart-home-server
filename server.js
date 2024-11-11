@@ -1,41 +1,56 @@
-require("dotenv").config(); // Load environment variables from .env file
-const express = require("express"); // Import Express framework
+// Importing needed frameworks and environment variables for the code.
+//
+const dotenv = require("dotenv"); //---------- Import dotenv for loading environment variables
+const express = require("express"); //-------- Import Express framework
 const session = require("express-session"); // Import express-session for session management
-const path = require("path"); // Import path module for working with file paths
-const cors = require("cors"); // Import CORS middleware to allow cross-origin requests
-const bcrypt = require("bcrypt"); // Import bcrypt for hashing passwords
+const path = require("path"); //-------------- Import path module for working with file paths
+const cors = require("cors"); //-------------- Import CORS middleware to allow cross-origin requests
+const bcrypt = require("bcrypt"); //---------- Import bcrypt for hashing passwords
 
-const app = express(); // Initialize Express application
-const pool = require("./pool"); // Import database connection pool
-const PORT = process.env.PORT || 5000; // Set server port from environment variable or default to 5000
+//------------------------------------------------------------------------------
 
-// Middleware
-app.use(cors()); // Enable CORS
-app.use(express.json()); // Parse JSON request bodies
+// Basic structure for Express application and database
+//
+const app = express(); //---------------- Initializing Express application
+const pool = require("./pool"); //------- Import database connection pool
+const PORT = process.env.PORT || 3000; // Set server port from environment variable or default to 3000
+
+//------------------------------------------------------------------------------
+
+// Middleware to handle CORS, parse JSON data, serve static files and manage user sessions.
+//
+app.use(cors()); //--------------------------- Enabling CORS
+app.use(express.json()); //------------------- Parse JSON request bodies
 app.use(express.static("./client/public")); // Serve static files from public directory
 app.use(
   session({
-    secret: "your_secret_key", // Secret key for signing the session ID cookie
-    resave: false, // Prevents resaving sessions if unmodified
-    saveUninitialized: true, // Forces a session that is uninitialized to be saved to the store
+    secret: "your_secret_key", //-------------------------------- Secret key for signing the session ID cookie
+    resave: false, //-------------------------------------------- Prevents resaving sessions if unmodified
+    saveUninitialized: true, //---------------------------------- Forces a session that is uninitialized to be saved to the store
     cookie: { secure: process.env.NODE_ENV === "production" }, // Set cookie to be secure in production
   })
 );
 
+//------------------------------------------------------------------------------
+
+// API endpoints for user authentication and device management
+//
+
 // Listen on specified PORT
+//
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}`);
 });
+//-------------------------------------------------
 
 // Create account endpoint
+//
 app.post("/auth/create", async (req, res) => {
   try {
-    const { username, email, password } = req.body; // Destructure username, email, and password from request body
+    const { username, email, password } = req.body;
     if (!username || !email || !password) {
-      return res.status(400).json({ error: "All fields are required" }); // Validate required fields
+      return res.status(400).json({ error: "All fields are required" });
     }
-
-    // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
     const query = `
       INSERT INTO users (username, email, password)
@@ -45,10 +60,9 @@ app.post("/auth/create", async (req, res) => {
     const result = await pool.query(query, [username, email, hashedPassword]);
     res
       .status(201)
-      .json({ message: "Account created successfully", user: result.rows[0] }); // Respond with created user info
+      .json({ message: "Account created successfully", user: result.rows[0] });
   } catch (error) {
-    console.error("Error creating account:", error); // Log any error that occurs
-    // Handle unique constraint errors and unexpected errors
+    console.error("Error creating account:", error);
     if (error.code === "23505") {
       return res
         .status(400)
@@ -60,6 +74,7 @@ app.post("/auth/create", async (req, res) => {
     }
   }
 });
+//------------------------------------------------------------------------------
 
 // Middleware to check if the user is authenticated
 function isAuthenticated(req, res, next) {
@@ -555,3 +570,9 @@ app.get("/user/notifications/:userId", (req, res) => {
 //Get Integrations Endpoint
 
 //Connect Integration Endpoint
+
+//------------------------------------------------------------------------------
+
+//Helper Functions
+//
+//------------------------------------------------------------------------------
