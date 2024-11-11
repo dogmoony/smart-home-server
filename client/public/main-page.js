@@ -76,41 +76,59 @@ async function fetchDevices(retry = true) {
   }
 }
 
-// Function to open the add device modal
-document.getElementById("open-modal-btn").addEventListener("click", () => {
-  document.getElementById("modal").style.display = "block";
-});
+// JavaScript for handling form submission
+document
+  .getElementById("add-device-form")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevent the default form submission behavior
 
-// Function to close the modal
-document.getElementById("close-btn").addEventListener("click", () => {
-  document.getElementById("modal").style.display = "none";
-});
+    // Collect data from form fields
+    const name = document.getElementById("device_name").value;
+    const type = document.getElementById("device_type").value;
+    const status = document.getElementById("device_status").value;
 
-// Close modal if the user clicks outside of it
-window.addEventListener("click", (event) => {
-  const modal = document.getElementById("modal");
-  if (event.target === modal) {
-    modal.style.display = "none";
-  }
-});
+    // Display a loading message or disable submit button temporarily
+    const messageElement = document.getElementById("message");
+    messageElement.textContent = "Adding device...";
 
-async function addDevice(name, type) {
-  try {
-    const response = await fetch("/api/devices", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, type }),
-    });
+    try {
+      // Send the data to the backend API
+      const response = await fetch("/api/devices", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, type, status }), // Send form data in request body
+      });
 
-    const data = await response.json();
-    if (response.ok) {
-      console.log("Device added:", data.device);
-    } else {
-      console.error("Error:", data.message);
+      // Parse the JSON response
+      const data = await response.json();
+
+      if (response.ok) {
+        // Display success message and reset the form
+        messageElement.textContent = "Device added successfully!";
+        document.getElementById("add-device-form").reset();
+
+        // Optionally close the modal after successful submission
+        closeModal();
+      } else {
+        // Display error message from server response
+        messageElement.textContent = data.message || "An error occurred.";
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      messageElement.textContent = "Failed to add device.";
     }
-  } catch (error) {
-    console.error("Fetch error:", error);
-  }
+  });
+
+// Function to open and close the modal
+document.getElementById("open-modal-btn").addEventListener("click", openModal);
+document.getElementById("close-btn").addEventListener("click", closeModal);
+
+function openModal() {
+  document.getElementById("modal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
 }
 
 // Check for the token on page load and fetch devices if authenticated
