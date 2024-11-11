@@ -13,7 +13,7 @@ const bcrypt = require("bcrypt"); //---------- Import bcrypt for hashing passwor
 //
 const app = express(); //---------------- Initializing Express application
 const pool = require("./pool"); //------- Import database connection pool
-const PORT = process.env.PORT || 3000; // Set server port from environment variable or default to 3000
+const PORT = process.env.PORT || 5000; // Set server port from environment variable or default to 3000
 
 //------------------------------------------------------------------------------
 
