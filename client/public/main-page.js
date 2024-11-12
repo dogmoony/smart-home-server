@@ -36,16 +36,20 @@ async function fetchDevices(retry = true) {
       deviceDiv.classList.add("device");
 
       deviceDiv.innerHTML = `
-        <h2>${device.device_name}</h2>
-        <p>Type: ${device.device_type}</p>
-        <p>Status: ${device.device_status}</p>
-        <p>Created At: ${new Date(device.created_at).toLocaleString()}</p>
+        <div class="device-container">
+        <h2 class="device-title">${device.device_name}</h2>
+        <p class="device-info">Type: ${device.device_type}</p>
+        <p class="device-info">Status: ${device.device_status}</p>
+        <p class="device-info">Created At: ${new Date(
+          device.created_at
+        ).toLocaleString()}</p>
         <button class="delete-button" data-id="${
           device.device_id
         }">Delete</button>
         <button class="update-button" data-id="${
           device.device_id
         }">Update</button>
+        </div>
       `;
       container.appendChild(deviceDiv);
     });
