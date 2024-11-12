@@ -130,7 +130,7 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
-    scrollbar-color: transparent (255, 255, 255, 0.7);
+    scrollbar-color: transparent rgba(255, 255, 255, 0.7);
   }
 
   .device-container::-webkit-scrollbar {
