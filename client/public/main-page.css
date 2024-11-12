@@ -130,11 +130,11 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
-    scrollbar-color: #000 #000;
+    scrollbar-color: transparent transparent;
   }
 
   .device-container::-webkit-scrollbar {
-    width: 10px;
+    width: 25px;
   }
 
   .device-container::-webkit-scrollbar-track {
