@@ -158,11 +158,10 @@ body {
       display: flex;
       flex-direction: column;
       border: 1px solid #ddd;
-      border-radius: 8px;
+      border-radius: 15px;
       padding: 16px;
       margin: 12px 0;
-      background-color: #fafafa;
-      max-width: 600px; /* Adjust to fit your layout */
+      background-color: transparent;
     }
 
 
