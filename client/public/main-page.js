@@ -37,18 +37,30 @@ async function fetchDevices(retry = true) {
 
       deviceDiv.innerHTML = `
         <div class="device">
-        <h2 class="device-title">${device.device_name}</h2>
-        <p class="device-info">Type: ${device.device_type}</p>
-        <p class="device-info">Status: ${device.device_status}</p>
-        <p class="device-info">Created At: ${new Date(
-          device.created_at
-        ).toLocaleString()}</p>
-        <button class="delete-button" data-id="${
-          device.device_id
-        }">Delete</button>
-        <button class="update-button" data-id="${
-          device.device_id
-        }">Update</button>
+          <div class="device-row">
+      
+        <!-- First column: Device Name -->
+          <div class="device-column device-name">
+          <h2 class="device-title">${device.device_name}</h2>
+          </div>
+
+        <!-- Second column: Type and Status -->
+          <div class="device-column device-info">
+          <p>Type: ${device.device_type}</p>
+          <p>Status: ${device.device_status}</p>
+          <p>Created At: ${new Date(device.created_at).toLocaleString()}</p>
+          </div>
+
+        <!-- Third column: Buttons -->
+          <div class="device-column device-actions">
+          <button class="update-button" data-id="${
+            device.device_id
+          }">Update</button>
+          <button class="delete-button" data-id="${
+            device.device_id
+          }">Delete</button>
+          </div>
+        </div>
         </div>
       `;
       container.appendChild(deviceDiv);
