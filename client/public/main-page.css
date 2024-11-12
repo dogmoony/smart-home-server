@@ -124,6 +124,11 @@ body {
   .home {
     background-color: #630404;
     height: 100%;
+  }
+
+  .device-container {
+    height: 80%;
+    background-color: #000;
     overflow-y: auto;
     overflow-x: hidden;
   }
