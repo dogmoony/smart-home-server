@@ -129,8 +129,8 @@ body {
     height: 80%;
     overflow-y: auto;
     overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.7) transparent;
+    scrollbar-width: 20px;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
   }
 
   .device-container::-webkit-scrollbar {
