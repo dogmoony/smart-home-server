@@ -36,7 +36,7 @@ async function fetchDevices(retry = true) {
       deviceDiv.classList.add("device");
 
       deviceDiv.innerHTML = `
-        <div class="device-container">
+        <div class="device">
         <h2 class="device-title">${device.device_name}</h2>
         <p class="device-info">Type: ${device.device_type}</p>
         <p class="device-info">Status: ${device.device_status}</p>
