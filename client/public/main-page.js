@@ -36,7 +36,6 @@ async function fetchDevices(retry = true) {
       deviceDiv.classList.add("device");
 
       deviceDiv.innerHTML = `
-        <div class="device">
           <div class="device-row">
       
         <!-- First column: Device Name -->
@@ -60,7 +59,6 @@ async function fetchDevices(retry = true) {
             device.device_id
           }">Delete</button>
           </div>
-        </div>
         </div>
       `;
       container.appendChild(deviceDiv);
