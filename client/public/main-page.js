@@ -1,9 +1,13 @@
 async function deleteDevice(deviceId) {
   try {
-    const response = await fetch(`/api/devices/${deviceId}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices",
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      }
+    );
 
     const data = await response.json();
 
