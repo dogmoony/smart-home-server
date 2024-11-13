@@ -212,19 +212,19 @@ p.device-info {
 .update-button, .delete-button {
   padding: 8px 12px;
   font-size: 14px;
-  border: 1px solid white;
+  border: 1px solid rgb(255, 255, 255, 0.5);
   border-radius: 15px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .update-button {
-  background-color: rgba(52, 152, 219, 0.5);
+  background-color: rgba(52, 152, 219, 0.3);
   color: #fff;
 }
 
 .delete-button {
-  background-color: rgba(231, 76, 60, 0.5);
+  background-color: rgba(231, 76, 60, 0.3);
   color: #fff;
 }
 
