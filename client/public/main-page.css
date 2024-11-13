@@ -167,7 +167,9 @@ body {
 
 /* Row styling */
 .device-row {
+  width: 100%;
   display: flex;
+  flex-direction: row;
   align-items: center;
 }
 
@@ -180,22 +182,14 @@ body {
 
 /* Specific column widths */
 .device-name {
-  flex: 1; /* Device Name Column */
 }
 
 .device-info {
-  flex: 2; /* Type and Status Column */
   align-items: flex-start;
-}
-
-p .device-info {
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
+  width: 50%;
 }
 
 .device-actions {
-  flex: 1; /* Buttons Column */
   display: flex;
   flex-direction: column;
   gap: 15px; /* Space between buttons */

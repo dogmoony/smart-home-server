@@ -36,11 +36,11 @@ async function fetchDevices(retry = true) {
       deviceDiv.classList.add("device");
 
       deviceDiv.innerHTML = `
-          <div class="device-row">
+      <div class="device-row">
       
         <!-- First column: Device Name -->
           <div class="device-column device-name">
-          <h2 class="device-title">${device.device_name}</h2>
+          <h2>${device.device_name}</h2>
           </div>
 
         <!-- Second column: Type and Status -->
