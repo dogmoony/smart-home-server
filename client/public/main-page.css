@@ -275,3 +275,8 @@ p.device-info {
 #greeting {
   height: 5%;
 }
+
+.title-add {
+  font-size: 64px;
+  font-weight: bold;
+}
