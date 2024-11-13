@@ -293,3 +293,16 @@ p.device-info {
   border: none;
   font-size: 20px;
 }
+
+#add-device-form button {
+  margin-top: 20px;
+  border: none;
+  border-radius: 15px;
+  background-color: rgba(52, 152, 219, 0.3);
+  color: white;
+  font-size: 24px;
+}
+
+#add-device-form button:hover {
+  background-color: rgba(52, 152, 219, 0.7);
+}
