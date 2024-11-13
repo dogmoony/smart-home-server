@@ -190,23 +190,17 @@ async function deleteDevice(deviceId) {
   try {
     const response = await fetch(`/api/devices/${deviceId}`, {
       method: "DELETE",
-      credentials: "include", // Include cookies if needed
+      headers: { "Content-Type": "application/json" },
     });
 
+    const data = await response.json();
+
     if (response.ok) {
-      document.getElementById("message").textContent =
-        "Device deleted successfully!";
-      // Optionally, remove the device from the DOM
-      document
-        .querySelector(`button[data-id="${deviceId}"]`)
-        .closest(".device")
-        .remove();
+      console.log(data.message); // Device deleted successfully
     } else {
-      document.getElementById("message").textContent =
-        "Failed to delete device.";
+      console.error(data.message); // Display error from the server
     }
   } catch (error) {
-    console.error("Error:", error);
-    document.getElementById("message").textContent = "An error occurred.";
+    console.error("Error deleting device:", error);
   }
 }
