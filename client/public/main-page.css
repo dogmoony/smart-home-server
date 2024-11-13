@@ -158,9 +158,9 @@ body {
       display: flex;
       flex-direction: column;
       border: 1px solid #ddd;
-      border-radius: 15px;
+      border-radius: 25px;
       padding: 10px;
-      margin: 12px;
+      margin: 20px;
       background-color: transparent;
     }
 
@@ -188,6 +188,8 @@ body {
 
 .device-actions {
   flex: 1; /* Buttons Column */
+  display: flex;
+  flex-direction: column;
   gap: 15px; /* Space between buttons */
 }
 
