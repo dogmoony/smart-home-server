@@ -255,12 +255,12 @@ p.device-info {
 }
 
 .home-bottom {
-  height: 10%;
+  height: 15%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 #greeting {
-  height: 10%;
+  height: 5%;
 }
