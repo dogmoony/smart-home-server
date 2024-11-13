@@ -19,6 +19,26 @@
 
         <!-- Content Sections -->
             <div class="content-container">
+                <!-- Modal structure -->
+                    <div id="modal">
+                    <div id="modal-content">
+                    <span id="close-btn">&times;</span> <!-- Close button -->
+                    <h1>Add Device</h1>
+                    <form id="add-device-form">
+                    <label for="device_name">Device Name:</label>
+                    <input type="text" id="device_name" required><br>
+
+                    <label for="device_type">Device Type:</label>
+                    <input type="text" id="device_type" required><br>
+
+                    <label for="device_status">Device Status:</label>
+                    <input type="text" id="device_status" required><br>
+
+                    <button type="submit">Add Device</button>
+                    </form>
+                    <p id="message"></p>
+                    </div>     
+                    </div>
                 <div id="home" class="home page">
                     <h1 id="greeting"></h1>
                     <div id="device-container" class="device-container"></div>
@@ -42,27 +62,7 @@
             </div>
             
 
-        <!-- Modal structure -->
-        <div id="modal">
-            <div id="modal-content">
-            <span id="close-btn">&times;</span> <!-- Close button -->
-            <h1>Add Device</h1>
-            <form id="add-device-form">
-                <label for="device_name">Device Name:</label>
-                <input type="text" id="device_name" required><br>
-
-                <label for="device_type">Device Type:</label>
-                <input type="text" id="device_type" required><br>
-
-                <label for="device_status">Device Status:</label>
-                <input type="text" id="device_status" required><br>
-
-                <button type="submit">Add Device</button>
-            </form>
-            <p id="message"></p>
-            </div>
-                        
-        </div>
+        
         <p id="message"></p>
     </div>
     
