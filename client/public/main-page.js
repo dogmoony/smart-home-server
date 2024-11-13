@@ -1,3 +1,22 @@
+async function deleteDevice(deviceId) {
+  try {
+    const response = await fetch(`/api/devices/${deviceId}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log(data.message); // Device deleted successfully
+    } else {
+      console.error(data.message); // Display error from the server
+    }
+  } catch (error) {
+    console.error("Error deleting device:", error);
+  }
+}
+
 fetch("/username")
   .then((response) => {
     if (!response.ok) {
@@ -184,23 +203,4 @@ function showPage(pageId, event) {
 
   // Add active class to the clicked button
   event.target.classList.add("active");
-}
-
-async function deleteDevice(deviceId) {
-  try {
-    const response = await fetch(`/api/devices/${deviceId}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      console.log(data.message); // Device deleted successfully
-    } else {
-      console.error(data.message); // Display error from the server
-    }
-  } catch (error) {
-    console.error("Error deleting device:", error);
-  }
 }
