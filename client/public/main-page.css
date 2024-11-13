@@ -39,7 +39,7 @@ body {
 
 #modal, #update-modal {
     display: none; /* Hidden by default */
-    position: relative;
+    position: fixed;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
@@ -156,7 +156,7 @@ body {
       height: 120px;
       display: flex;
       flex-direction: column;
-      border: 1px solid #ddd;
+      border: 1px solid rgba(0, 0, 0, 0.7);
       border-radius: 25px;
       padding: 5px;
       margin: 20px;
