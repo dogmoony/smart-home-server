@@ -185,3 +185,28 @@ function showPage(pageId, event) {
   // Add active class to the clicked button
   event.target.classList.add("active");
 }
+
+async function deleteDevice(deviceId) {
+  try {
+    const response = await fetch(`/api/devices/${deviceId}`, {
+      method: "DELETE",
+      credentials: "include", // Include cookies if needed
+    });
+
+    if (response.ok) {
+      document.getElementById("message").textContent =
+        "Device deleted successfully!";
+      // Optionally, remove the device from the DOM
+      document
+        .querySelector(`button[data-id="${deviceId}"]`)
+        .closest(".device")
+        .remove();
+    } else {
+      document.getElementById("message").textContent =
+        "Failed to delete device.";
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    document.getElementById("message").textContent = "An error occurred.";
+  }
+}

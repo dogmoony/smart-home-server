@@ -477,3 +477,26 @@ app.get("/user/notifications/:userId", (req, res) => {
 //Helper Functions
 //
 //------------------------------------------------------------------------------
+
+app.delete("/api/devices/:id", async (req, res) => {
+  const deviceId = req.params.id;
+
+  try {
+    // Delete the device from the database
+    const result = await pool.query(
+      "DELETE FROM devices WHERE device_id = $1",
+      [deviceId]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Device not found" });
+    }
+
+    res.status(200).json({ message: "Device deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting device:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting the device" });
+  }
+});
