@@ -182,6 +182,7 @@ body {
 
 /* Specific column widths */
 .device-name {
+  width: 30%;
 }
 
 .device-info {
@@ -190,6 +191,7 @@ body {
 }
 
 .device-actions {
+  width: 20%;
   display: flex;
   flex-direction: column;
   gap: 15px; /* Space between buttons */
