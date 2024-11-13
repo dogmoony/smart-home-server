@@ -129,7 +129,7 @@ document
       }
     } catch (error) {
       console.error("Error:", error);
-      messageElement.textContent = "Failed to add device.";
+      messageElement.textContent = `Failed to add device: ${error.message}`;
     }
   });
 
