@@ -120,9 +120,6 @@ document
         // Display success message and reset the form
         messageElement.textContent = "Device added successfully!";
         document.getElementById("add-device-form").reset();
-
-        // Optionally close the modal after successful submission
-        closeModal();
       } else {
         // Display error message from server response
         messageElement.textContent = data.message || "An error occurred.";
