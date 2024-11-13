@@ -296,6 +296,7 @@ p.device-info {
 
 #add-device-form button {
   margin-top: 20px;
+  padding: 10px 20px;
   border: none;
   border-radius: 15px;
   background-color: rgba(52, 152, 219, 0.3);
