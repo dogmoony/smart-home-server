@@ -39,9 +39,7 @@ body {
 
 #modal, #update-modal {
     display: none; /* Hidden by default */
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: absolute;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
@@ -162,7 +160,7 @@ body {
       border-radius: 25px;
       padding: 5px;
       margin: 20px;
-      background-color: transparent;
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
 
@@ -239,7 +237,7 @@ p.device-info {
 .open-button {
   height: 60%;
   width: 40%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   padding: 8px 12px;
   font-size: 24px;
   border: none;
