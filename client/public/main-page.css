@@ -185,6 +185,7 @@ body {
 .device-info {
   flex: 2; /* Type and Status Column */
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
 }
 
