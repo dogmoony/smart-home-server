@@ -159,7 +159,7 @@ body {
       flex-direction: column;
       border: 1px solid #ddd;
       border-radius: 25px;
-      padding: 10px;
+      padding: 5px;
       margin: 20px;
       background-color: transparent;
     }
@@ -168,7 +168,6 @@ body {
 /* Row styling */
 .device-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
