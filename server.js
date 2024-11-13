@@ -480,18 +480,20 @@ app.get("/user/notifications/:userId", (req, res) => {
 
 app.delete("/api/devices/:id", async (req, res) => {
   const deviceId = req.params.id;
+  console.log(`Attempting to delete device with ID: ${deviceId}`);
 
   try {
-    // Delete the device from the database
     const result = await pool.query(
       "DELETE FROM devices WHERE device_id = $1",
       [deviceId]
     );
 
     if (result.rowCount === 0) {
+      console.log("Device not found with ID:", deviceId);
       return res.status(404).json({ message: "Device not found" });
     }
 
+    console.log("Device deleted successfully with ID:", deviceId);
     res.status(200).json({ message: "Device deleted successfully" });
   } catch (error) {
     console.error("Error deleting device:", error);
