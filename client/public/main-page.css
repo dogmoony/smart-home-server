@@ -156,7 +156,7 @@ body {
       height: 120px;
       display: flex;
       flex-direction: column;
-      border: 1px solid rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(0, 0, 0, 0.3);
       border-radius: 25px;
       padding: 5px;
       margin: 20px;
@@ -210,18 +210,19 @@ p.device-info {
 .update-button, .delete-button {
   padding: 8px 12px;
   font-size: 14px;
-  border: 1px solid rgb(255, 255, 255, 0.5);
   border-radius: 15px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .update-button {
+  border: 1px solid rgba(52, 152, 219, 0.7);
   background-color: rgba(52, 152, 219, 0.3);
   color: #fff;
 }
 
 .delete-button {
+  border: 1px solid rgba(231, 76, 60, 0.7);
   background-color: rgba(231, 76, 60, 0.3);
   color: #fff;
 }
