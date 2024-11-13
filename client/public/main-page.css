@@ -208,19 +208,19 @@ body {
 }
 
 .update-button {
-  background-color: #3498db; /* Blue for Update */
+  background-color: rgba(52, 152, 219, 0.5);
   color: #fff;
 }
 
 .delete-button {
-  background-color: #e74c3c; /* Red for Delete */
+  background-color: rgba(231, 76, 60, 0.5);
   color: #fff;
 }
 
 .update-button:hover {
-  background-color: #2980b9;
+  background-color: rgba(52, 152, 219, 0.7);
 }
 
 .delete-button:hover {
-  background-color: #c0392b;
+  background-color: rgba(231, 76, 60, 0.7);
 }
