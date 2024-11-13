@@ -190,8 +190,7 @@ body {
 .device-info {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px; /* Space between info elements */
+  justify-content: center;
   width: 50%;
 }
 
