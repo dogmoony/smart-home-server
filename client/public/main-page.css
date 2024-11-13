@@ -282,8 +282,6 @@ p.device-info {
 }
 
 #add-device-form {
-  display: flex;
-  flex-direction: column;
   gap: 10px;
   font-size: 24px;
 }
