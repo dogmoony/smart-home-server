@@ -192,6 +192,9 @@ body {
   align-items: flex-start;
   justify-content: center;
   width: 50%;
+  margin: 2px 0; /* Reduce the vertical margin */
+  padding: 0;    /* Remove any extra padding if needed */
+  line-height: 1.2;
 }
 
 p.device-info {
