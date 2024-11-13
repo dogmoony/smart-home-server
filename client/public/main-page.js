@@ -119,14 +119,17 @@ document
       if (response.ok) {
         // Display success message and reset the form
         messageElement.textContent = "Device added successfully!";
+        messageElement.style.color = "green";
         document.getElementById("add-device-form").reset();
       } else {
         // Display error message from server response
         messageElement.textContent = data.message || "An error occurred.";
+        messageElement.style.color = "red";
       }
     } catch (error) {
       console.error("Error:", error);
       messageElement.textContent = `Failed to add device: ${error.message}`;
+      messageElement.style.color = "red";
     }
   });
 
