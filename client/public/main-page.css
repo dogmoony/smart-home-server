@@ -52,12 +52,13 @@ body {
   }
 
 #modal-content {
-    background-color: #fff;
+    background-color: white;
     padding: 20px;
-    width: 300px;
-    border-radius: 5px;
+    border-radius: 8px;
+    max-width: 500px; /* Width of the modal content */
+    width: 90%; /* Responsive width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
-    color: #000;
   }
 
 #close-btn {
