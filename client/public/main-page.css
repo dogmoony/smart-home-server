@@ -280,3 +280,11 @@ p.device-info {
   font-size: 64px;
   font-weight: bold;
 }
+
+#add-device-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 24px;
+}
+
