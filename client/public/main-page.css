@@ -237,13 +237,13 @@ p.device-info {
 }
 
 .open-button {
-  height: 80%;
+  height: 60%;
   width: 40%;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 8px 12px;
   font-size: 24px;
   border: none;
-  border-radius: 15px;
+  border-radius: 25px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
