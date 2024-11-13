@@ -133,17 +133,29 @@ document
     }
   });
 
-// Function to open and close the modal
-document.getElementById("open-modal-btn").addEventListener("click", openModal);
-document.getElementById("close-btn").addEventListener("click", closeModal);
+// JavaScript code to open and close the modal
 
-function openModal() {
-  document.getElementById("modal").style.display = "block";
-}
+// Select elements
+const modal = document.getElementById("modal");
+const openModalBtn = document.getElementById("open-modal-btn");
+const closeModalBtn = document.getElementById("close-btn");
 
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-}
+// Open modal when clicking the "Open Window" button
+openModalBtn.addEventListener("click", () => {
+  modal.style.display = "flex"; // Set modal display to flex to center it
+});
+
+// Close modal when clicking the "X" close button
+closeModalBtn.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+// Close modal when clicking outside of the modal content
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
 
 // Check for the token on page load and fetch devices if authenticated
 window.addEventListener("DOMContentLoaded", () => {
