@@ -44,19 +44,60 @@ async function deleteDevice(deviceId) {
 }
 //-------------------------------------------------------------------------------------------
 
-// Modal elements
-const updateModal = document.getElementById("update-modal");
-const closeUpdateModalBtn = document.getElementById("close-update-modal");
-const updateMessage = document.getElementById("update-message");
+// Updating device
+//
 
-// Fetch and display the devices, and attach event listeners
-async function fetchDevices() {
+// Select elements
+const updateModal = document.getElementById("update-modal");
+const updateModalBtn = document.getElementById("open-update-modal");
+const closeUpdateModalBtn = document.getElementById("close-update-modal");
+
+// Open modal when clicking the "Open Window" button
+updateModalBtn.addEventListener("click", () => {
+  updateModal.style.display = "flex"; // Set modal display to flex to center it
+});
+
+// Close modal when clicking the "X" close button
+closeUpdateModalBtn.addEventListener("click", () => {
+  updateModal.style.display = "none";
+});
+
+// Close modal when clicking outside of the modal content
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    updateModal.style.display = "none";
+  }
+});
+
+async function updateDevice(deviceId, updates) {
+  try {
+    const response = await fetch(
+      `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update device");
+    }
+
+    const updatedDevice = await response.json();
+    console.log("Device updated successfully:", updatedDevice);
+  } catch (error) {
+    console.error("Error updating device:", error);
+  }
+}
+//-----------------------------------------------------------------------------------------------
+
+// Function to fetch and display devices
+async function fetchDevices(retry = true) {
   try {
     const response = await fetch(
       "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices",
-      {
-        credentials: "include",
-      }
+      { credentials: "include" }
     );
 
     if (!response.ok) {
@@ -70,47 +111,59 @@ async function fetchDevices() {
     devices.forEach((device) => {
       const deviceDiv = document.createElement("div");
       deviceDiv.classList.add("device");
+
       deviceDiv.innerHTML = `
-        <div class="device-row">
+      <div class="device-row">
+      
+        <!-- First column: Device Name -->
           <div class="device-column device-name">
-            <h2>${device.device_name}</h2>
+          <h2>${device.device_name}</h2>
           </div>
+
+        <!-- Second column: Type and Status -->
           <div class="device-column device-info">
-            <p>Type: ${device.device_type}</p>
-            <p>Status: ${device.device_status}</p>
-            <p>Created At: ${new Date(device.created_at).toLocaleString()}</p>
+          <p>Type: ${device.device_type}</p>
+          <p>Status: ${device.device_status}</p>
+          <p>Created At: ${new Date(device.created_at).toLocaleString()}</p>
           </div>
+
+        <!-- Third column: Buttons -->
           <div class="device-column device-actions">
-            <button class="update-button" data-id="${
-              device.device_id
-            }">Update</button>
-            <button class="delete-button" data-id="${
-              device.device_id
-            }">Delete</button>
+          <button class="update-button" id="open-update-modal" data-id="${
+            device.device_id
+          }">Update</button>
+          <button class="delete-button" data-id="${
+            device.device_id
+          }">Delete</button>
           </div>
         </div>
       `;
       container.appendChild(deviceDiv);
     });
 
-    // Attach update button functionality
-    document.querySelectorAll(".update-button").forEach((button) => {
-      button.addEventListener("click", (event) => {
-        const deviceId = event.target.getAttribute("data-id");
-        openUpdateModal(deviceId); // Pass the deviceId to the modal
-      });
-    });
-
     // Attach delete button functionality
     document.querySelectorAll(".delete-button").forEach((button) => {
       button.addEventListener("click", (event) => {
         const deviceId = event.target.getAttribute("data-id");
-        deleteDevice(deviceId); // Handle the deletion
+        deleteDevice(deviceId);
+      });
+    });
+
+    // Attach update button functionality
+    document.querySelectorAll(".update-button").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const deviceId = event.target.getAttribute("data-id");
+        openUpdateModal(deviceId);
       });
     });
   } catch (error) {
     console.error("Error fetching devices:", error);
     document.getElementById("message").textContent = error.message;
+
+    // Retry logic
+    if (retry) {
+      setTimeout(() => fetchDevices(false), 1000);
+    }
   }
 }
 
@@ -211,89 +264,68 @@ function showPage(pageId, event) {
   event.target.classList.add("active");
 }
 
-// Updating device
-//
-
-// Function to open the update modal with pre-filled device data
-function openUpdateModal(deviceId) {
-  // Fetch device details from the API to populate the modal (use the deviceId)
-  fetch(
-    `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`
-  )
-    .then((response) => response.json())
-    .then((device) => {
-      // Pre-fill the form fields with the device details
-      document.getElementById("update-device-name").value = device.device_name;
-      document.getElementById("update-device-type").value = device.device_type;
-      document.getElementById("update-device-status").value =
-        device.device_status;
-
-      // Store the deviceId to use later when updating
-      updateModal.setAttribute("data-device-id", deviceId);
-
-      // Show the modal
-      updateModal.style.display = "flex";
-    })
-    .catch((error) => {
-      console.error("Error fetching device details:", error);
-    });
-}
-
-// Close the modal when the close button is clicked
-closeUpdateModalBtn.addEventListener("click", () => {
-  updateModal.style.display = "none";
-  updateMessage.textContent = ""; // Clear any previous messages
-});
-
-// Close the modal if clicked outside of the modal content
-window.addEventListener("click", (event) => {
-  if (event.target === updateModal) {
-    updateModal.style.display = "none";
-    updateMessage.textContent = "";
-  }
-});
-
-// Handle form submission to update device
+// JavaScript for handling form submission
 document
   .getElementById("update-device-form")
   .addEventListener("submit", async function (event) {
-    event.preventDefault();
+    event.preventDefault(); // Prevent the default form submission behavior
 
-    // Get the deviceId from the modal
-    const deviceId = updateModal.getAttribute("data-device-id");
-
-    // Collect updated data from the form fields
+    // Collect data from form fields
     const name = document.getElementById("update-device-name").value;
     const type = document.getElementById("update-device-type").value;
     const status = document.getElementById("update-device-status").value;
 
-    updateMessage.textContent = "Updating device...";
+    // Display a loading message or disable submit button temporarily
+    const messageElement = document.getElementById("update-message");
+    messageElement.textContent = "Updating device...";
 
     try {
+      // Send the data to the backend API
       const response = await fetch(
-        `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
+        "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}",
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, type, status }),
+          body: JSON.stringify({ name, type, status }), // Send form data in request body
         }
       );
 
+      // Parse the JSON response
+      const data = await response.json();
+
       if (response.ok) {
-        updateMessage.textContent = "Device updated successfully!";
-        updateMessage.style.color = "green";
-        await fetchDevices(); // Refresh the device list after update
-        updateModal.style.display = "none"; // Close the modal
+        // Display success message and reset the form
+        messageElement.textContent = "Device updated successfully!";
+        messageElement.style.color = "green";
+        document.getElementById("add-device-form").reset();
+        await fetchDevices(); // Refresh the device list after adding a new one
       } else {
-        const errorData = await response.json();
-        updateMessage.textContent = errorData.message || "Update failed.";
-        updateMessage.style.color = "red";
+        // Display error message from server response
+        messageElement.textContent = data.message || "An error occurred.";
+        messageElement.style.color = "red";
       }
     } catch (error) {
-      console.error("Error updating device:", error);
-      updateMessage.textContent = "Failed to update device.";
-      updateMessage.style.color = "red";
+      console.error("Error:", error);
+      messageElement.textContent = `Failed to update device: ${error.message}`;
+      messageElement.style.color = "red";
     }
   });
 
-//-----------------------------------------------------------------------------------------------
+// JavaScript code to open and close the modal
+
+// Open modal when clicking the "Open Window" button
+updateModalBtn.addEventListener("click", () => {
+  modal.style.display = "flex"; // Set modal display to flex to center it
+});
+
+// Close modal when clicking the "X" close button
+closeUpdateModalBtn.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+// Close modal when clicking outside of the modal content
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
