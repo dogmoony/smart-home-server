@@ -217,7 +217,7 @@ app.post("/api/devices", async (req, res) => {
 
 // Delete Device Endpoint
 app.delete("/api/devices/:id", async (req, res) => {
-  const { device_id } = req.params;
+  const device_id = req.params.id;
   console.log("Deleting device:", device_id);
 
   if (!device_id) {
