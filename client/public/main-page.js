@@ -15,7 +15,7 @@ fetch("/username")
     window.location.href = "/login.html"; // Redirect to login if unauthorized
   });
 
-// Function to delete a device from the device list and return the device
+// Function to delete a device from the device list and refresh the list
 async function deleteDevice(deviceId) {
   try {
     const response = await fetch(
@@ -27,15 +27,15 @@ async function deleteDevice(deviceId) {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to delete device");
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to delete device");
     }
 
     const deletedDevice = await response.json();
     console.log(`Deleted device: ${deletedDevice.device_name}`);
 
-    // Update the device list without the deleted device
-    const devices = await fetchDevices(false);
-    document.getElementById("device-container").innerHTML = devices;
+    // Fetch and render the updated device list
+    await fetchDevices(); // This function should handle rendering the updated list
   } catch (error) {
     console.error("Error deleting device:", error);
   }
