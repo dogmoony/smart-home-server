@@ -15,35 +15,6 @@ fetch("/username")
     window.location.href = "/login.html"; // Redirect to login if unauthorized
   });
 
-// Deleting device
-//
-// Function to delete a device from the device list and refresh the list
-async function deleteDevice(deviceId) {
-  try {
-    const response = await fetch(
-      `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to delete device");
-    }
-
-    const deletedDevice = await response.json();
-    console.log(`Deleted device: ${deletedDevice.device_name}`);
-
-    // Fetch and render the updated device list
-    await fetchDevices(); // This function should handle rendering the updated list
-  } catch (error) {
-    console.error("Error deleting device:", error);
-  }
-}
-//-------------------------------------------------------------------------------------------
-
 // Function to fetch and display devices
 async function fetchDevices(retry = true) {
   try {
