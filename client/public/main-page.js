@@ -44,31 +44,6 @@ async function deleteDevice(deviceId) {
 }
 //-------------------------------------------------------------------------------------------
 
-// Updating device
-//
-async function updateDevice(deviceId, updates) {
-  try {
-    const response = await fetch(
-      `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updates),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to update device");
-    }
-
-    const updatedDevice = await response.json();
-    console.log("Device updated successfully:", updatedDevice);
-  } catch (error) {
-    console.error("Error updating device:", error);
-  }
-}
-//-----------------------------------------------------------------------------------------------
-
 // Function to fetch and display devices
 async function fetchDevices(retry = true) {
   try {
@@ -240,74 +215,3 @@ function showPage(pageId, event) {
   // Add active class to the clicked button
   event.target.classList.add("active");
 }
-
-// JavaScript for handling form submission
-document
-  .getElementById("update-device-form")
-  .addEventListener("submit", async function (event) {
-    event.preventDefault(); // Prevent the default form submission behavior
-
-    // Collect data from form fields
-    const name = document.getElementById("update-device-name").value;
-    const type = document.getElementById("update-device-type").value;
-    const status = document.getElementById("update-device-status").value;
-
-    // Display a loading message or disable submit button temporarily
-    const messageElement = document.getElementById("update-message");
-    messageElement.textContent = "Updating device...";
-
-    try {
-      // Send the data to the backend API
-      const response = await fetch(
-        "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}",
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, type, status }), // Send form data in request body
-        }
-      );
-
-      // Parse the JSON response
-      const data = await response.json();
-
-      if (response.ok) {
-        // Display success message and reset the form
-        messageElement.textContent = "Device updated successfully!";
-        messageElement.style.color = "green";
-        document.getElementById("add-device-form").reset();
-        await fetchDevices(); // Refresh the device list after adding a new one
-      } else {
-        // Display error message from server response
-        messageElement.textContent = data.message || "An error occurred.";
-        messageElement.style.color = "red";
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      messageElement.textContent = `Failed to update device: ${error.message}`;
-      messageElement.style.color = "red";
-    }
-  });
-
-// JavaScript code to open and close the modal
-
-// Select elements
-const updateModal = document.getElementById("update-modal");
-const updateModalBtn = document.getElementById("open-update-modal");
-const closeUpdateModalBtn = document.getElementById("close-update-modal");
-
-// Open modal when clicking the "Open Window" button
-updateModalBtn.addEventListener("click", () => {
-  modal.style.display = "flex"; // Set modal display to flex to center it
-});
-
-// Close modal when clicking the "X" close button
-closeUpdateModalBtn.addEventListener("click", () => {
-  modal.style.display = "none";
-});
-
-// Close modal when clicking outside of the modal content
-window.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    modal.style.display = "none";
-  }
-});
