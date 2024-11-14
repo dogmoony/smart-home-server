@@ -27,7 +27,7 @@ CREATE TABLE notifications (
 CREATE TABLE devices (
     device_id SERIAL PRIMARY KEY,
     home_id INT REFERENCES users(home_id) ON DELETE CASCADE,
-    device_name VARCHAR(50) NOT NULL,
+    device_name VARCHAR(50) NOT NULL UNIQUE,
     device_type VARCHAR(50) NOT NULL,
     device_status VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
@@ -50,27 +50,3 @@ CREATE TABLE automations (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
-INSERT INTO users (username, email, password)
-VALUES 
-    ('user1', 'user1@example.com', 'password123'),
-    ('user2', 'user123@example.com', 'pass'),
-    ('karl', 'karl@example.com', 'karLLLL');
-
-INSERT INTO users_preferences (home_id, preferred_temperature, preferred_humidity, preferred_lighting)
-VALUES (1, 22.0, 50.0, 50);
-
-INSERT INTO notifications (home_id, notification_type, notification_message)
-VALUES (1, 'Temperature Alert', 'The temperature is too high!');
-
-INSERT INTO devices (home_id, device_name, device_type, device_status)
-VALUES (1, 'Living Room Light', 'Light', 'On');
-
-INSERT INTO scenes (home_id, scene_name, scene_description)
-VALUES (1, 'Good Morning', 'Wake up to a bright and cozy morning');
-
-INSERT INTO automations (home_id, automation_name, automation_trigger, automation_action)
-VALUES (1, 'Good Morning', 'Sunrise', 'Turn on Living Room Light');
-
-SELECT * FROM users;
-SELECT * FROM users_preferences WHERE home_id = 1;
-SELECT * FROM notifications WHERE home_id = 1;
