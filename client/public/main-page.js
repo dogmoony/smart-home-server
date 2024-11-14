@@ -41,6 +41,35 @@ async function deleteDevice(deviceId) {
   }
 }
 
+async function updateDevice(deviceId, updatedData) {
+  try {
+    const response = await fetch(
+      `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(updatedData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update device");
+    }
+
+    console.log(`Device ${deviceId} updated successfully`);
+
+    // Refresh the device list or update the UI as needed
+    fetchDevices();
+
+    // Close the modal after saving
+    document.getElementById("update-modal").style.display = "none";
+  } catch (error) {
+    console.error("Error updating device:", error);
+    alert("Failed to update device.");
+  }
+}
+
 // Function to fetch and display devices
 async function fetchDevices(retry = true) {
   try {
@@ -161,6 +190,43 @@ document
   });
 
 // JavaScript code to open and close the modal
+
+function openUpdateModal(deviceId) {
+  // Find the modal and its input fields
+  const modal = document.getElementById("update-modal");
+  const nameInput = document.getElementById("update-device-name");
+  const typeInput = document.getElementById("update-device-type");
+  const statusInput = document.getElementById("update-device-status");
+  const saveButton = document.getElementById("save-update-button");
+
+  // Fetch the current device details
+  fetch(
+    `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`
+  )
+    .then((response) => response.json())
+    .then((device) => {
+      // Populate the modal input fields with current device details
+      nameInput.value = device.device_name;
+      typeInput.value = device.device_type;
+      statusInput.value = device.device_status;
+
+      // Open the modal
+      modal.style.display = "flex";
+
+      // Set up the save button to call the update function with the new data
+      saveButton.onclick = function () {
+        updateDevice(deviceId, {
+          device_name: nameInput.value,
+          device_type: typeInput.value,
+          device_status: statusInput.value,
+        });
+      };
+    })
+    .catch((error) => {
+      console.error("Error fetching device data:", error);
+      alert("Could not load device details.");
+    });
+}
 
 // Select elements
 const modal = document.getElementById("modal");

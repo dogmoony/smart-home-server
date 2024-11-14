@@ -216,6 +216,7 @@ app.post("/api/devices", async (req, res) => {
 //----------------------------------------------------------------------------------
 
 // Delete Device Endpoint
+//
 app.delete("/api/devices/:id", async (req, res) => {
   const device_id = req.params.id;
   console.log("Deleting device:", device_id);
@@ -243,9 +244,38 @@ app.delete("/api/devices/:id", async (req, res) => {
     res.status(500).json({ message: "An unexpected error occurred." });
   }
 });
+//---------------------------------------------------------------------------------
 
-//Control Device Endpoint
-app.post("/api/devices/:id/control", (req, res) => {});
+//Update Device Endpoint
+app.put("/api/devices/:id", async (req, res) => {
+  const device_id = req.params.id;
+  console.log("Updating device:", device_id);
+  const { name, type, status } = req.body;
+
+  if (!device_id) {
+    return res.status(400).json({ message: "Device ID is required." });
+  }
+  try {
+    const result = await pool.query(
+      `UPDATE devices
+       SET device_name = $1,
+           device_type = $2,
+           device_status = $3
+       WHERE device_id = $4
+       RETURNING *`,
+      [name, type, status, device_id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Device not found." });
+    }
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error updating device:", error);
+    res.status(500).json({ message: "An unexpected error occurred." });
+  }
+});
 
 //Get Device Status Endpoint
 app.get("/api/devices/:id/status", (req, res) => {
