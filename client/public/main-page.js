@@ -15,6 +15,8 @@ fetch("/username")
     window.location.href = "/login.html"; // Redirect to login if unauthorized
   });
 
+// Deleting device
+//
 // Function to delete a device from the device list and refresh the list
 async function deleteDevice(deviceId) {
   try {
@@ -40,6 +42,32 @@ async function deleteDevice(deviceId) {
     console.error("Error deleting device:", error);
   }
 }
+//-------------------------------------------------------------------------------------------
+
+// Updating device
+//
+
+// Select elements
+const updateModal = document.getElementById("update-modal");
+const updateModalBtn = document.getElementById("open-update-modal");
+const closeUpdateModalBtn = document.getElementById("close-update-modal");
+
+// Open modal when clicking the "Open Window" button
+updateModalBtn.addEventListener("click", () => {
+  updateModal.style.display = "flex"; // Set modal display to flex to center it
+});
+
+// Close modal when clicking the "X" close button
+closeUpdateModalBtn.addEventListener("click", () => {
+  updateModal.style.display = "none";
+});
+
+// Close modal when clicking outside of the modal content
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    updateModal.style.display = "none";
+  }
+});
 
 async function updateDevice(deviceId, updates) {
   try {
@@ -62,6 +90,7 @@ async function updateDevice(deviceId, updates) {
     console.error("Error updating device:", error);
   }
 }
+//-----------------------------------------------------------------------------------------------
 
 // Function to fetch and display devices
 async function fetchDevices(retry = true) {
@@ -283,25 +312,3 @@ document
   });
 
 // JavaScript code to open and close the modal
-
-// Select elements
-const updateModal = document.getElementById("update-modal");
-const updateModalBtn = document.getElementById("open-update-modal");
-const closeUpdateModalBtn = document.getElementById("close-update-modal");
-
-// Open modal when clicking the "Open Window" button
-updateModalBtn.addEventListener("click", () => {
-  modal.style.display = "flex"; // Set modal display to flex to center it
-});
-
-// Close modal when clicking the "X" close button
-closeUpdateModalBtn.addEventListener("click", () => {
-  modal.style.display = "none";
-});
-
-// Close modal when clicking outside of the modal content
-window.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    modal.style.display = "none";
-  }
-});
