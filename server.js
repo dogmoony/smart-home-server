@@ -216,7 +216,32 @@ app.post("/api/devices", async (req, res) => {
 //----------------------------------------------------------------------------------
 
 // Delete Device Endpoint
-app.delete("/api/devices/:id", async (req, res) => {});
+app.delete("/api/devices/:id", async (req, res) => {
+  const { device_id } = req.params;
+
+  if (!device_id) {
+    return res.status(400).json({ message: "Device ID is required." });
+  }
+
+  const homeId = req.session.homeId;
+  try {
+    const result = await pool.query(
+      "DELETE FROM devices WHERE device_id = $1 AND home_id = $2 RETURNING *",
+      [device_id, homeId]
+    );
+
+    if (result.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Device not found or does not belong to this user." });
+    }
+
+    res.status(201).json({ message: "Device deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting device:", error);
+    res.status(500).json({ message: "An unexpected error occurred." });
+  }
+});
 
 //Control Device Endpoint
 app.post("/api/devices/:id/control", (req, res) => {});
@@ -477,28 +502,3 @@ app.get("/user/notifications/:userId", (req, res) => {
 //Helper Functions
 //
 //------------------------------------------------------------------------------
-
-app.delete("/api/devices/:id", async (req, res) => {
-  const deviceId = req.params.id;
-  console.log(`Attempting to delete device with ID: ${deviceId}`);
-
-  try {
-    const result = await pool.query(
-      "DELETE FROM devices WHERE device_id = $1",
-      [deviceId]
-    );
-
-    if (result.rowCount === 0) {
-      console.log("Device not found with ID:", deviceId);
-      return res.status(404).json({ message: "Device not found" });
-    }
-
-    console.log("Device deleted successfully with ID:", deviceId);
-    res.status(200).json({ message: "Device deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting device:", error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while deleting the device" });
-  }
-});

@@ -15,6 +15,32 @@ fetch("/username")
     window.location.href = "/login.html"; // Redirect to login if unauthorized
   });
 
+// Function to delete a device from the device list and return the device
+async function deleteDevice(deviceId) {
+  try {
+    const response = await fetch(
+      `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to delete device");
+    }
+
+    const deletedDevice = await response.json();
+    console.log(`Deleted device: ${deletedDevice.device_name}`);
+
+    // Update the device list without the deleted device
+    const devices = await fetchDevices(false);
+    document.getElementById("device-container").innerHTML = devices;
+  } catch (error) {
+    console.error("Error deleting device:", error);
+  }
+}
+
 // Function to fetch and display devices
 async function fetchDevices(retry = true) {
   try {
@@ -67,7 +93,6 @@ async function fetchDevices(retry = true) {
     // Attach delete button functionality
     document.querySelectorAll(".delete-button").forEach((button) => {
       button.addEventListener("click", (event) => {
-        console.log("Delete button clicked");
         const deviceId = event.target.getAttribute("data-id");
         deleteDevice(deviceId);
       });
