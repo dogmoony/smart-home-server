@@ -219,47 +219,76 @@ function showPage(pageId, event) {
 // Updating device
 //
 
-// Select elements
+// Open and close modal functionality
 const updateModal = document.getElementById("update-modal");
-const updateModalBtn = document.getElementById("open-update-modal");
+const openUpdateModalBtn = document.getElementById("open-update-modal");
 const closeUpdateModalBtn = document.getElementById("close-update-modal");
+const updateMessage = document.getElementById("update-message");
 
-// Open modal when clicking the "Open Window" button
-updateModalBtn.addEventListener("click", () => {
-  updateModal.style.display = "flex"; // Set modal display to flex to center it
+// Open modal and populate form data (you can replace with actual data fetching)
+openUpdateModalBtn.addEventListener("click", (event) => {
+  const deviceId = event.target.getAttribute("data-id");
+
+  // Populate the form with current device data (mock data for example purposes)
+  document.getElementById("update-device-name").value = "Smart Light";
+  document.getElementById("update-device-type").value = "Lighting";
+  document.getElementById("update-device-status").value = "On";
+
+  updateModal.style.display = "flex"; // Show the modal
 });
 
-// Close modal when clicking the "X" close button
+// Close modal
 closeUpdateModalBtn.addEventListener("click", () => {
   updateModal.style.display = "none";
+  updateMessage.textContent = ""; // Clear any messages
 });
 
 // Close modal when clicking outside of the modal content
 window.addEventListener("click", (event) => {
-  if (event.target === modal) {
+  if (event.target === updateModal) {
     updateModal.style.display = "none";
+    updateMessage.textContent = "";
   }
 });
 
-async function updateDevice(deviceId, updates) {
-  try {
-    const response = await fetch(
-      `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updates),
+// Handle form submission
+document
+  .getElementById("update-device-form")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    // Get updated values from the form
+    const name = document.getElementById("update-device-name").value;
+    const type = document.getElementById("update-device-type").value;
+    const status = document.getElementById("update-device-status").value;
+
+    updateMessage.textContent = "Updating device...";
+
+    try {
+      const response = await fetch(
+        `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, type, status }),
+        }
+      );
+
+      if (response.ok) {
+        updateMessage.textContent = "Device updated successfully!";
+        updateMessage.style.color = "green";
+        await fetchDevices(); // Refresh device list
+        updateModal.style.display = "none"; // Close the modal
+      } else {
+        const errorData = await response.json();
+        updateMessage.textContent = errorData.message || "Update failed.";
+        updateMessage.style.color = "red";
       }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to update device");
+    } catch (error) {
+      console.error("Error updating device:", error);
+      updateMessage.textContent = "Failed to update device.";
+      updateMessage.style.color = "red";
     }
+  });
 
-    const updatedDevice = await response.json();
-    console.log("Device updated successfully:", updatedDevice);
-  } catch (error) {
-    console.error("Error updating device:", error);
-  }
-}
 //-----------------------------------------------------------------------------------------------
