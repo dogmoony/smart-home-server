@@ -46,29 +46,6 @@ async function deleteDevice(deviceId) {
 
 // Updating device
 //
-
-// Select elements
-const updateModal = document.getElementById("update-modal");
-const updateModalBtn = document.getElementById("open-update-modal");
-const closeUpdateModalBtn = document.getElementById("close-update-modal");
-
-// Open modal when clicking the "Open Window" button
-updateModalBtn.addEventListener("click", () => {
-  updateModal.style.display = "flex"; // Set modal display to flex to center it
-});
-
-// Close modal when clicking the "X" close button
-closeUpdateModalBtn.addEventListener("click", () => {
-  updateModal.style.display = "none";
-});
-
-// Close modal when clicking outside of the modal content
-window.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    updateModal.style.display = "none";
-  }
-});
-
 async function updateDevice(deviceId, updates) {
   try {
     const response = await fetch(
@@ -312,6 +289,11 @@ document
   });
 
 // JavaScript code to open and close the modal
+
+// Select elements
+const updateModal = document.getElementById("update-modal");
+const updateModalBtn = document.getElementById("open-update-modal");
+const closeUpdateModalBtn = document.getElementById("close-update-modal");
 
 // Open modal when clicking the "Open Window" button
 updateModalBtn.addEventListener("click", () => {
