@@ -44,54 +44,6 @@ async function deleteDevice(deviceId) {
 }
 //-------------------------------------------------------------------------------------------
 
-// Updating device
-//
-
-// Select elements
-const updateModal = document.getElementById("update-modal");
-const updateModalBtn = document.getElementById("open-update-modal");
-const closeUpdateModalBtn = document.getElementById("close-update-modal");
-
-// Open modal when clicking the "Open Window" button
-updateModalBtn.addEventListener("click", () => {
-  updateModal.style.display = "flex"; // Set modal display to flex to center it
-});
-
-// Close modal when clicking the "X" close button
-closeUpdateModalBtn.addEventListener("click", () => {
-  updateModal.style.display = "none";
-});
-
-// Close modal when clicking outside of the modal content
-window.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    updateModal.style.display = "none";
-  }
-});
-
-async function updateDevice(deviceId, updates) {
-  try {
-    const response = await fetch(
-      `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updates),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to update device");
-    }
-
-    const updatedDevice = await response.json();
-    console.log("Device updated successfully:", updatedDevice);
-  } catch (error) {
-    console.error("Error updating device:", error);
-  }
-}
-//-----------------------------------------------------------------------------------------------
-
 // Function to fetch and display devices
 async function fetchDevices(retry = true) {
   try {
@@ -312,3 +264,51 @@ document
   });
 
 // JavaScript code to open and close the modal
+
+// Updating device
+//
+
+// Select elements
+const updateModal = document.getElementById("update-modal");
+const updateModalBtn = document.getElementById("open-update-modal");
+const closeUpdateModalBtn = document.getElementById("close-update-modal");
+
+// Open modal when clicking the "Open Window" button
+updateModalBtn.addEventListener("click", () => {
+  updateModal.style.display = "flex"; // Set modal display to flex to center it
+});
+
+// Close modal when clicking the "X" close button
+closeUpdateModalBtn.addEventListener("click", () => {
+  updateModal.style.display = "none";
+});
+
+// Close modal when clicking outside of the modal content
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    updateModal.style.display = "none";
+  }
+});
+
+async function updateDevice(deviceId, updates) {
+  try {
+    const response = await fetch(
+      `http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update device");
+    }
+
+    const updatedDevice = await response.json();
+    console.log("Device updated successfully:", updatedDevice);
+  } catch (error) {
+    console.error("Error updating device:", error);
+  }
+}
+//-----------------------------------------------------------------------------------------------
