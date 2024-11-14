@@ -216,55 +216,6 @@ function showPage(pageId, event) {
   event.target.classList.add("active");
 }
 
-// JavaScript for handling form submission
-document
-  .getElementById("update-device-form")
-  .addEventListener("submit", async function (event) {
-    event.preventDefault(); // Prevent the default form submission behavior
-
-    // Collect data from form fields
-    const name = document.getElementById("update-device-name").value;
-    const type = document.getElementById("update-device-type").value;
-    const status = document.getElementById("update-device-status").value;
-
-    // Display a loading message or disable submit button temporarily
-    const messageElement = document.getElementById("update-message");
-    messageElement.textContent = "Updating device...";
-
-    try {
-      // Send the data to the backend API
-      const response = await fetch(
-        "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/${deviceId}",
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, type, status }), // Send form data in request body
-        }
-      );
-
-      // Parse the JSON response
-      const data = await response.json();
-
-      if (response.ok) {
-        // Display success message and reset the form
-        messageElement.textContent = "Device updated successfully!";
-        messageElement.style.color = "green";
-        document.getElementById("add-device-form").reset();
-        await fetchDevices(); // Refresh the device list after adding a new one
-      } else {
-        // Display error message from server response
-        messageElement.textContent = data.message || "An error occurred.";
-        messageElement.style.color = "red";
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      messageElement.textContent = `Failed to update device: ${error.message}`;
-      messageElement.style.color = "red";
-    }
-  });
-
-// JavaScript code to open and close the modal
-
 // Updating device
 //
 
