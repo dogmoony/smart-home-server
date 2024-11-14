@@ -147,6 +147,7 @@ document
         messageElement.textContent = "Device added successfully!";
         messageElement.style.color = "green";
         document.getElementById("add-device-form").reset();
+        await fetchDevices(); // Refresh the device list after adding a new one
       } else {
         // Display error message from server response
         messageElement.textContent = data.message || "An error occurred.";
