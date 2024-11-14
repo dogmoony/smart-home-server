@@ -1,4 +1,5 @@
 async function deleteDevice(deviceId) {
+  console.log("Delete button clicked for device:", deviceId);
   try {
     const response = await fetch(
       "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/:id",
