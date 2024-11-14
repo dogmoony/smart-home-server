@@ -101,11 +101,12 @@ async function fetchDevices(retry = true) {
       });
     });
 
-    // Attach update button functionality
-    document.querySelectorAll(".update-button").forEach((button) => {
+    // Attach delete button functionality
+    document.querySelectorAll(".delete-button").forEach((button) => {
       button.addEventListener("click", (event) => {
         const deviceId = event.target.getAttribute("data-id");
-        openUpdateModal(deviceId);
+        console.log("Delete button clicked for device ID:", deviceId); // Check if the click event is triggered
+        deleteDevice(deviceId);
       });
     });
   } catch (error) {
