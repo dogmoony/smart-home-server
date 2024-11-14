@@ -1,27 +1,3 @@
-async function deleteDevice(deviceId) {
-  console.log("Delete button clicked for device:", deviceId);
-  try {
-    const response = await fetch(
-      "http://ec2-3-8-8-117.eu-west-2.compute.amazonaws.com:5000/api/devices/:id",
-      {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      }
-    );
-
-    const data = await response.json();
-
-    if (response.ok) {
-      console.log(data.message); // Device deleted successfully
-    } else {
-      console.error(data.message); // Display error from the server
-    }
-  } catch (error) {
-    console.error("Error deleting device:", error);
-  }
-}
-
 fetch("/username")
   .then((response) => {
     if (!response.ok) {
@@ -91,6 +67,7 @@ async function fetchDevices(retry = true) {
     // Attach delete button functionality
     document.querySelectorAll(".delete-button").forEach((button) => {
       button.addEventListener("click", (event) => {
+        console.log("Delete button clicked");
         const deviceId = event.target.getAttribute("data-id");
         deleteDevice(deviceId);
       });
